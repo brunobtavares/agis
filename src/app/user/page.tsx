@@ -25,7 +25,7 @@ type Respose = {
 
 export default function User() {
     const router = useRouter();
-    const { data, error, isLoading } = useSWR('/stats', async () => {
+    const { data, error, isLoading } = useSWR('/userData', async () => {
 
         const hash = localStorage.getItem('hash');
 
@@ -37,7 +37,7 @@ export default function User() {
         var bytes = CryptoJS.AES.decrypt(hash, 'brunobtavares');
         var originalText: { user: string, password: string } = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
-        const response = await Api.post<Respose>('/stats', { user: originalText.user, password: originalText.password });
+        const response = await Api.post<Respose>('/userData', { user: originalText.user, password: originalText.password });
         const data = response.data;
 
         if (!data || !data.success) {
