@@ -5,20 +5,20 @@ import { Card } from 'primereact/card';
 import useSWR from 'swr';
 import { Api } from '../../axios/client';
 
-type aluno = {
+type UserModel = {
     name: string;
-    stats: stats[]
+    userData: UserData[]
 }
 
-type stats = {
-    materia: any,
-    media: any,
-    presencas: any,
-    faltas: any,
+type UserData = {
+    subject: any,
+    average: any,
+    attendances: any,
+    absences: any,
 }
 
 type Respose = {
-    data: aluno,
+    data: UserModel,
     message: string,
     success: boolean
 }
@@ -78,21 +78,21 @@ export default function User() {
                             </div>
                             <div className='col-12 d-flex flex-column gap-2' style={{ overflow: 'auto', maxHeight: '80vh' }}>
                                 {
-                                    data?.data.stats.map(d => {
+                                    data?.data.userData.map(d => {
                                         return (
-                                            <Card key={d.presencas} title={d.materia} className='customCardColor'>
+                                            <Card key={d.attendances} title={d.subject} className='customCardColor'>
                                                 <div className='d-flex gap-5'>
                                                     <div>
                                                         <h5>Média</h5>
-                                                        <h6>{d.media}</h6>
+                                                        <h6>{d.average}</h6>
                                                     </div>
                                                     <div>
                                                         <h5>Faltas</h5>
-                                                        <h6>{d.faltas}</h6>
+                                                        <h6>{d.absences}</h6>
                                                     </div>
                                                     <div>
                                                         <h5>Presenças</h5>
-                                                        <h6>{d.presencas}</h6>
+                                                        <h6>{d.attendances}</h6>
                                                     </div>
                                                 </div>
                                             </Card>
