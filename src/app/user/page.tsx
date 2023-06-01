@@ -65,42 +65,40 @@ export default function User() {
                         </div>
                     </div>
                     :
-                    <div>
-                        <div className="d-flex justify-content-center align-items-center mt-2" style={{ height: '100%' }}>
-                            <div className='w-100'>
-                                <div className='d-flex align-items-center gap-3'>
-                                    <h5 className='ms-1'>
-                                        <i className="pi pi-user me-1" />
-                                        <span>{data?.data.name}</span>
-                                    </h5>
-                                    <div>
-                                        <i className="pi pi-sign-out text-danger" title='Sair' onClick={exit} />
-                                    </div>
+                    <div className="d-flex justify-content-center align-items-center" style={{ height: '100svh' }}>
+                        <div className='w-100'>
+                            <div className='d-flex align-items-center gap-3'>
+                                <h5 className='ms-1'>
+                                    <i className="pi pi-user me-1" />
+                                    <span>{data?.data.name}</span>
+                                </h5>
+                                <div>
+                                    <i className="pi pi-sign-out text-danger" title='Sair' onClick={exit} />
                                 </div>
-                                <div className='col-12' style={{ overflow: 'auto', maxHeight: '80vh' }}>
-                                    {
-                                        data?.data.stats.map(d => {
-                                            return (
-                                                <Card key={d.presencas} title={d.materia} className='customCardColor my-2'>
-                                                    <div className='d-flex gap-5'>
-                                                        <div>
-                                                            <h5>Média</h5>
-                                                            <h6>{d.media}</h6>
-                                                        </div>
-                                                        <div>
-                                                            <h5>Faltas</h5>
-                                                            <h6>{d.faltas}</h6>
-                                                        </div>
-                                                        <div>
-                                                            <h5>Presenças</h5>
-                                                            <h6>{d.presencas}</h6>
-                                                        </div>
+                            </div>
+                            <div className='col-12 d-flex flex-column gap-2' style={{ overflow: 'auto', maxHeight: '80vh' }}>
+                                {
+                                    data?.data.stats.map(d => {
+                                        return (
+                                            <Card key={d.presencas} title={d.materia} className='customCardColor'>
+                                                <div className='d-flex gap-5'>
+                                                    <div>
+                                                        <h5>Média</h5>
+                                                        <h6>{d.media}</h6>
                                                     </div>
-                                                </Card>
-                                            );
-                                        })
-                                    }
-                                </div>
+                                                    <div>
+                                                        <h5>Faltas</h5>
+                                                        <h6>{d.faltas}</h6>
+                                                    </div>
+                                                    <div>
+                                                        <h5>Presenças</h5>
+                                                        <h6>{d.presencas}</h6>
+                                                    </div>
+                                                </div>
+                                            </Card>
+                                        );
+                                    })
+                                }
                             </div>
                         </div>
                     </div>
