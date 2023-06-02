@@ -21,7 +21,6 @@ export default function Login() {
 
     if (!data || !data.success) {
       if (!data.success) { console.debug('Error:', data.message); }
-      localStorage.removeItem('hash');
       return null;
     }
 
