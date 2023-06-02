@@ -52,7 +52,6 @@ export default function Login() {
         localStorage.setItem('hash', ciphertext);
 
         router.push('/user');
-        setLoading(false);
       });
   }
 
