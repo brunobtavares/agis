@@ -8,7 +8,7 @@ import { Api } from '../../axios/client';
 
 export default function User() {
     const router = useRouter();
-    const { data, error, isLoading,  } = useSWR('/userData', async () => {
+    const { data, error, isLoading, isValidating } = useSWR('/userData', async () => {
         const hash = localStorage.getItem('hash');
 
         if (!hash) {
@@ -33,6 +33,7 @@ export default function User() {
     });
 
     function exit(route = '/') {
+        localStorage.removeItem('hash');
         router.push(route);
     }
 
