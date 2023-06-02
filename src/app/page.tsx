@@ -51,8 +51,8 @@ export default function Login() {
         var ciphertext = CryptoJS.AES.encrypt(JSON.stringify({ user, password }), 'brunobtavares').toString();
         localStorage.setItem('hash', ciphertext);
 
-        setLoading(false);
         router.push('/user');
+        setLoading(false);
       });
   }
 

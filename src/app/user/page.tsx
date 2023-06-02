@@ -12,7 +12,7 @@ export default function User() {
         const hash = localStorage.getItem('hash');
 
         if (!hash) {
-            exit('/?v=false');
+            exit();
             return null;
         }
 
@@ -26,7 +26,7 @@ export default function User() {
         if (!data || !data.success) {
             if (!data.success) { console.debug('Error:', data.message); }
             localStorage.removeItem('hash');
-            exit('/?v=false');
+            exit();
             return null;
         }
 
