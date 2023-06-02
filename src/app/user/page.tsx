@@ -25,7 +25,6 @@ export default function User() {
 
         if (!data || !data.success) {
             if (!data.success) { console.debug('Error:', data.message); }
-            localStorage.removeItem('hash');
             exit();
             return null;
         }
@@ -34,7 +33,7 @@ export default function User() {
     });
 
     function exit(route = '/') {
-        localStorage.removeItem('hash');
+        // localStorage.removeItem('hash');
         router.push(route);
     }
 
