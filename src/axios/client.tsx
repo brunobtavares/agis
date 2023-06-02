@@ -3,7 +3,8 @@ import axios from 'axios';
 const localStorageTokenKey = 'authorization';
 
 export const Api = axios.create({
-    baseURL: 'https://gradeapp--brunaotavares.repl.co/',
+    // baseURL: 'https://gradeapp--brunaotavares.repl.co/',
+    baseURL: 'http://127.0.0.1:81/',
 });
 
 // Api.interceptors.request.use((config) => {
