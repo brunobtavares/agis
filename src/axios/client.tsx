@@ -4,7 +4,7 @@ const localStorageTokenKey = 'authorization';
 
 export const Api = axios.create({
     baseURL: 'https://gradeapp--brunaotavares.repl.co/',
-    // baseURL: 'http://127.0.0.1:81/',
+    // baseURL: 'http://192.168.0.10:81/',
 });
 
 // Api.interceptors.request.use((config) => {

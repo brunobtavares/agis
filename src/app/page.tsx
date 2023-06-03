@@ -58,7 +58,7 @@ export default function Login() {
 
   function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (loading || !user || !password) return;
+    if (loading || user == '' || password == '') return;
     setLoading(true);
 
     mutate<ResponseModel>('/userData')
