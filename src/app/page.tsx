@@ -11,12 +11,11 @@ import useSWR, { mutate } from 'swr';
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
-  const [loadingPage, setLoadingPage] = useState(true);
   const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
   const toast = useRef<Toast>(null);
   const router = useRouter();
-  const { data, isLoading } = useSWR('/userData', async () => {
+  const { isLoading } = useSWR('/userData', async () => {
 
     let localUser = user;
     let localPassword = password;
@@ -24,7 +23,7 @@ export default function Login() {
 
     const hash = localStorage.getItem('hash');
     if (hash) {
-      let bytes = CryptoJS.AES.decrypt(hash, 'brunobtavares');
+      let bytes = CryptoJS.AES.decrypt(hash, process.env.NEXT_PUBLIC_ENCRYPT_KEY ?? "");
       let originalText: { user: string, password: string } = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
       localUser = originalText.user;
@@ -70,7 +69,7 @@ export default function Login() {
           return;
         }
 
-        var ciphertext = CryptoJS.AES.encrypt(JSON.stringify({ user, password }), 'brunobtavares').toString();
+        var ciphertext = CryptoJS.AES.encrypt(JSON.stringify({ user, password }), process.env.NEXT_PUBLIC_ENCRYPT_KEY ?? "").toString();
         localStorage.setItem('hash', ciphertext);
 
         router.push('/user');

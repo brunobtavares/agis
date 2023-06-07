@@ -18,7 +18,7 @@ export default function User() {
             return null;
         }
 
-        var bytes = CryptoJS.AES.decrypt(hash, 'brunobtavares');
+        var bytes = CryptoJS.AES.decrypt(hash, process.env.NEXT_PUBLIC_ENCRYPT_KEY ?? "");
         var originalText: { user: string, password: string } = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
         const response = await Api.post<ResponseModel>('/userData', { user: originalText.user, password: originalText.password });
