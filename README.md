@@ -1,34 +1,41 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# GradeApp
 
-## Getting Started
+O GradeApp é uma ferramenta desenvolvida para facilitar o acesso e acompanhamento dos dados acadêmicos dos estudantes.
+</br>
+O objetivo principal do aplicativo é permitir que os alunos consultem suas notas, faltas e registros de presença de forma rápida, conveniente e em tempo real.
 
-First, run the development server:
+## Funcionalidades
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+### É possível visualizar
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- As matérias que você está matriculado
+- Os professores responsáveis pelas respectivas matérias
+- Suas notas
+- Suas faltas
+- Suas presenças
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Pré-requisitos
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+ - Versão do NodeJS: 18.16.0
 
-## Learn More
+## Instalação
 
-To learn more about Next.js, take a look at the following resources:
+1. Clone este repositório: `git clone https://github.com/brunobtavares/grade-app.git`
+2. Navegue até o diretório do projeto: `cd grade-app`
+3. Instale as dependências: `npm install`
+4. Execute utilizando `npm run dev`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contribuição
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Se você deseja contribuir para este projeto e melhorá-lo, siga as etapas abaixo:
 
-## Deploy on Vercel
+1. Faça um fork do repositório
+2. Crie uma nova branch: `git checkout -b feature/nome-da-nova-feature`
+3. Faça as suas alterações
+4. Commit suas alterações: `git commit -m 'Adicionando nova feature'`
+5. Faça um push para a branch: `git push origin feature/nome-da-nova-feature`
+6. Abra um Pull Request
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Autor
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+ - Bruno Bezerra Tavares
