@@ -67,7 +67,12 @@ export default function User() {
                                 ?
                                 data.data.userData.map(d => {
                                     return (
-                                        <Card key={d.attendances} title={d.subject} className='customCardColor'>
+                                        <Card key={d.attendances} title={
+                                            <div>
+                                                <div>{d.subject}</div>
+                                                <div style={{fontSize:12, fontWeight:'lighter'}}>{d.teacher}</div>
+                                            </div>
+                                        } className='customCardColor'>
                                             <div className='d-flex gap-5'>
                                                 <div>
                                                     <h5>Média</h5>
