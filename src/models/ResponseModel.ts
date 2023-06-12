@@ -1,7 +1,6 @@
-import { UserModel } from "./userModel"
 
-export type ResponseModel = {
-    data: UserModel,
+export type ResponseModel<T> = {
+    data: T,
     message: string,
     success: boolean
 }

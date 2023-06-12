@@ -12,6 +12,10 @@ body {
   background-color: #20262E !important;
 }
 
+.p-datatable .p-datatable-thead > tr > th{
+  border-top: none !important;
+}
+
 /* width */
 ::-webkit-scrollbar {
   width: 5px;

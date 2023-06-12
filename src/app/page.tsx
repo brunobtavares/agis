@@ -1,6 +1,7 @@
 'use client'
 import { Api } from '@/axios/client';
 import { ResponseModel } from '@/models/ResponseModel';
+import { UserModel } from '@/models/userModel';
 import CryptoJS from 'crypto-js';
 import { useRouter } from 'next/navigation';
 import { Button } from 'primereact/button';
@@ -31,7 +32,7 @@ export default function Login() {
     }
 
 
-    const response = await Api.post<ResponseModel>('/userData', { user: localUser, password: localPassword });
+    const response = await Api.post<ResponseModel<UserModel>>('/userData', { user: localUser, password: localPassword });
     const data = response.data;
 
     if (!data || !data.success) {
@@ -60,7 +61,7 @@ export default function Login() {
     if (loading || user == '' || password == '') return;
     setLoading(true);
 
-    mutate<ResponseModel>('/userData')
+    mutate<ResponseModel<UserModel>>('/userData')
       .then((response) => {
 
         if (!response || !response.success) {
