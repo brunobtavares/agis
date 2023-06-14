@@ -10,9 +10,12 @@ import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
 import { ProgressBar } from 'primereact/progressbar';
 import { Skeleton } from 'primereact/skeleton';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import useSWR from 'swr';
 import { Api } from '../../axios/client';
+
+import { useClickOutside } from 'primereact/hooks';
+
 
 export default function User() {
     const router = useRouter();
@@ -92,7 +95,7 @@ export default function User() {
 }
 
 function ClassCard({ userData }: { userData: UserData }) {
-    const [showModal, setShowModal] = useState<boolean>();
+    const [showModal, setShowModal] = useState<boolean>(false);
 
     function defineAverageColor(average: any) {
         if (isNaN(average))
@@ -131,15 +134,29 @@ function ClassCard({ userData }: { userData: UserData }) {
                     </div>
                 </div>
             </Card>
+            <ModalDetails
+                subject={userData.subject}
+                grade={userData.grade}
+                showModal={showModal}
+                setShowModal={setShowModal}
+            />
+        </div>
+    );
+}
+
+function ModalDetails({ subject, grade, showModal, setShowModal }: { subject: any, grade: [], showModal: boolean, setShowModal: Dispatch<SetStateAction<boolean>> }) {
+    const modalRef = useRef(null);
+
+    useClickOutside(modalRef, () => { setShowModal(false); });
+
+    return (
+        <div ref={modalRef}>
             <Dialog
-                header={userData.subject}
+                header={subject}
                 visible={showModal}
                 onHide={() => setShowModal(false)}
                 draggable={false}>
-                <DataTable
-                    value={userData.grade}
-                    size='small'
-                >
+                <DataTable value={grade} size='small'>
                     <Column field="0" header="Avaliação"></Column>
                     <Column field="1" header="Data de Lançamento"></Column>
                     <Column field="2" header="Nota"></Column>
