@@ -94,6 +94,18 @@ export default function User() {
 function ClassCard({ userData }: { userData: UserData }) {
     const [showModal, setShowModal] = useState<boolean>();
 
+    function defineAverageColor(average: any) {
+        if (isNaN(average))
+            return '';
+
+        average = Number(average);
+
+        if (average >= 6)
+            return 'text-success';
+        else
+            return 'text-danger';
+    }
+
     return (
         <div>
             <Card key={userData.attendances} title={
@@ -107,7 +119,7 @@ function ClassCard({ userData }: { userData: UserData }) {
                 <div className='d-flex gap-5'>
                     <div>
                         <h5>Média</h5>
-                        <h6>{userData.average}</h6>
+                        <h6 className={defineAverageColor(userData.average)}>{userData.average}</h6>
                     </div>
                     <div>
                         <h5>Faltas</h5>
