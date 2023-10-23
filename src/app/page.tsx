@@ -18,23 +18,14 @@ export default function Login() {
   const router = useRouter();
   const { isLoading } = useSWR('/userData', async () => {
 
-    let localUser = user;
-    let localPassword = password;
-
     let hash = localStorage.getItem('hash');
-    if (hash) {
-      let originalText: { user: string, password: string } = decrypt(hash);
 
-      localUser = originalText.user;
-      localPassword = originalText.password;
-    }
-    else {
+    if (!hash) {
       hash = encrypt(JSON.stringify({
         "user": user,
         "password": password
       }));
     }
-
 
     const response = await Api.post<ResponseModel<UserModel>>('/userData', { hash: hash });
     const data = response.data;

@@ -2,7 +2,6 @@
 import { ResponseModel } from '@/models/ResponseModel';
 import { UserData } from '@/models/userData';
 import { UserModel } from '@/models/userModel';
-import CryptoJS from 'crypto-js';
 import { useRouter } from 'next/navigation';
 import { Card } from 'primereact/card';
 import { Column } from 'primereact/column';
@@ -15,19 +14,16 @@ import useSWR from 'swr';
 import { Api } from '../../axios/client';
 
 import { useClickOutside } from 'primereact/hooks';
-import { decrypt } from '@/utils/CryptoHelper';
 
 export default function User() {
     const router = useRouter();
-    const { data, error, isLoading, isValidating } = useSWR('/userData', async () => {
+    const { data, isLoading, isValidating } = useSWR('/userData', async () => {
         const hash = localStorage.getItem('hash');
 
         if (!hash) {
             exit();
             return null;
         }
-
-        var originalText: { user: string, password: string } = decrypt(hash);
 
         const response = await Api.post<ResponseModel<UserModel>>('/userData', { hash: hash });
 
