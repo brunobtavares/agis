@@ -2,7 +2,7 @@
 import { Api } from '@/axios/client';
 import { ResponseModel } from '@/models/ResponseModel';
 import { UserModel } from '@/models/userModel';
-import CryptoJS from 'crypto-js';
+import { decrypt, encrypt } from '@/utils/CryptoHelper';
 import { useRouter } from 'next/navigation';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
@@ -21,18 +21,22 @@ export default function Login() {
     let localUser = user;
     let localPassword = password;
 
-
-    const hash = localStorage.getItem('hash');
+    let hash = localStorage.getItem('hash');
     if (hash) {
-      let bytes = CryptoJS.AES.decrypt(hash, process.env.NEXT_PUBLIC_ENCRYPT_KEY ?? "");
-      let originalText: { user: string, password: string } = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+      let originalText: { user: string, password: string } = decrypt(hash);
 
       localUser = originalText.user;
       localPassword = originalText.password;
     }
+    else {
+      hash = encrypt(JSON.stringify({
+        "user": user,
+        "password": password
+      }));
+    }
 
 
-    const response = await Api.post<ResponseModel<UserModel>>('/userData', { user: localUser, password: localPassword });
+    const response = await Api.post<ResponseModel<UserModel>>('/userData', { hash: hash });
     const data = response.data;
 
     if (!data || !data.success) {
@@ -70,8 +74,12 @@ export default function Login() {
           return;
         }
 
-        var ciphertext = CryptoJS.AES.encrypt(JSON.stringify({ user, password }), process.env.NEXT_PUBLIC_ENCRYPT_KEY ?? "").toString();
-        localStorage.setItem('hash', ciphertext);
+        var hash = encrypt(JSON.stringify({
+          "user": user,
+          "password": password
+        }));
+
+        localStorage.setItem('hash', hash);
 
         router.push('/user');
       });

@@ -15,7 +15,7 @@ import useSWR from 'swr';
 import { Api } from '../../axios/client';
 
 import { useClickOutside } from 'primereact/hooks';
-
+import { decrypt } from '@/utils/CryptoHelper';
 
 export default function User() {
     const router = useRouter();
@@ -27,10 +27,9 @@ export default function User() {
             return null;
         }
 
-        var bytes = CryptoJS.AES.decrypt(hash, process.env.NEXT_PUBLIC_ENCRYPT_KEY ?? "");
-        var originalText: { user: string, password: string } = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+        var originalText: { user: string, password: string } = decrypt(hash);
 
-        const response = await Api.post<ResponseModel<UserModel>>('/userData', { user: originalText.user, password: originalText.password });
+        const response = await Api.post<ResponseModel<UserModel>>('/userData', { hash: hash });
 
         const data = response.data;
 
