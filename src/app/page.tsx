@@ -1,8 +1,8 @@
 'use client'
-import { Api } from '@/axios/client';
 import { ResponseModel } from '@/models/ResponseModel';
 import { UserModel } from '@/models/userModel';
-import { decrypt, encrypt } from '@/utils/CryptoHelper';
+import { getUserData } from '@/services/userService';
+import { encrypt } from '@/utils/CryptoHelper';
 import { useRouter } from 'next/navigation';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
@@ -16,39 +16,14 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const toast = useRef<Toast>(null);
   const router = useRouter();
-  const { isLoading } = useSWR('/userData', async () => {
-
-    let hash = localStorage.getItem('hash');
-
-    if (!hash) {
-      hash = encrypt(JSON.stringify({
-        "user": user,
-        "password": password
-      }));
-    }
-
-    const response = await Api.post<ResponseModel<UserModel>>('/userData', { hash: hash });
-    const data = response.data;
-
-    if (!data || !data.success) {
-      if (!data.success) { console.debug('Error:', data.message); }
-      return null;
-    }
-
-    return data;
-  });
+  const { isLoading } = useSWR('/userData', () => getUserData(user, password));
 
   useEffect(() => {
-    const hash = localStorage.getItem('hash');
-    if (hash) {
-      router.push('/user');
-    }
+    if (localStorage.getItem('hash')) { router.push('/user'); }
   });
 
   function showToastError() {
-    if (toast && toast.current) {
-      toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Usuário ou Senha invalido!' });
-    }
+    if (toast && toast.current) { toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Usuário ou Senha invalido!' }); }
   }
 
   function handleLogin(event: React.FormEvent<HTMLFormElement>) {
@@ -65,10 +40,7 @@ export default function Login() {
           return;
         }
 
-        var hash = encrypt(JSON.stringify({
-          "user": user,
-          "password": password
-        }));
+        var hash = encrypt(JSON.stringify({ "user": user, "password": password }));
 
         localStorage.setItem('hash', hash);
 

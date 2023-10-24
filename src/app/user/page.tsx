@@ -1,7 +1,5 @@
 'use client'
-import { ResponseModel } from '@/models/ResponseModel';
 import { UserData } from '@/models/userData';
-import { UserModel } from '@/models/userModel';
 import { useRouter } from 'next/navigation';
 import { Card } from 'primereact/card';
 import { Column } from 'primereact/column';
@@ -11,36 +9,21 @@ import { ProgressBar } from 'primereact/progressbar';
 import { Skeleton } from 'primereact/skeleton';
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import useSWR from 'swr';
-import { Api } from '../../axios/client';
 
+import { getUserData } from '@/services/userService';
 import { useClickOutside } from 'primereact/hooks';
 
 export default function User() {
     const router = useRouter();
-    const { data, isLoading, isValidating } = useSWR('/userData', async () => {
-        const hash = localStorage.getItem('hash');
+    const { data, isLoading, isValidating } = useSWR('/userData', getUserData);
 
-        if (!hash) {
-            exit();
-            return null;
-        }
-
-        const response = await Api.post<ResponseModel<UserModel>>('/userData', { hash: hash });
-
-        const data = response.data;
-
-        if (!data || !data.success) {
-            if (!data.success) { console.debug('Error:', data.message); }
-            exit();
-            return null;
-        }
-
-        return data;
-    });
-
-    function exit(route = '/') {
+    function exit() {
         localStorage.removeItem('hash');
-        router.push(route);
+        router.push('/');
+    }
+
+    if (!isLoading && (!data || !data.success)) {
+        exit()
     }
 
     return (
