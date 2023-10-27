@@ -1,5 +1,5 @@
 'use client'
-import { UserData } from '@/models/userData';
+import { ClassModel } from '@/models/userData';
 import { useRouter } from 'next/navigation';
 import { Card } from 'primereact/card';
 import { Column } from 'primereact/column';
@@ -7,10 +7,10 @@ import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
 import { ProgressBar } from 'primereact/progressbar';
 import { Skeleton } from 'primereact/skeleton';
-import { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
 
-import { getUserData } from '@/services/userService';
+import { getGrade, getUserData } from '@/services/userService';
 import { useClickOutside } from 'primereact/hooks';
 
 export default function User() {
@@ -52,9 +52,9 @@ export default function User() {
                         {
                             data
                                 ?
-                                data.data.userData.map(d => {
+                                data.data.classes.map(d => {
                                     return (<ClassCard
-                                        key={d.subject}
+                                        key={d.name}
                                         userData={d} />);
                                 })
                                 :
@@ -72,7 +72,7 @@ export default function User() {
     )
 }
 
-function ClassCard({ userData }: { userData: UserData }) {
+function ClassCard({ userData }: { userData: ClassModel }) {
     const [showModal, setShowModal] = useState<boolean>(false);
 
     function defineAverageColor(average: any) {
@@ -89,9 +89,9 @@ function ClassCard({ userData }: { userData: UserData }) {
 
     return (
         <div>
-            <Card key={userData.attendances} title={
+            <Card key={userData.attendance} title={
                 <div>
-                    <div>{userData.subject}</div>
+                    <div>{userData.name}</div>
                     <div style={{ fontSize: 12, fontWeight: 'lighter' }}>{userData.teacher}</div>
                 </div>
             }
@@ -104,26 +104,32 @@ function ClassCard({ userData }: { userData: UserData }) {
                     </div>
                     <div>
                         <h5>Faltas</h5>
-                        <h6>{userData.absences}</h6>
+                        <h6>{userData.absence}</h6>
                     </div>
                     <div>
                         <h5>Presenças</h5>
-                        <h6>{userData.attendances}</h6>
+                        <h6>{userData.attendance}</h6>
                     </div>
                 </div>
             </Card>
-            <ModalDetails
-                subject={userData.subject}
-                grade={userData.grade}
-                showModal={showModal}
-                setShowModal={setShowModal}
-            />
+            {
+                showModal
+                &&
+                <ModalDetails
+                    classCode={userData.code}
+                    subject={userData.name}
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                />
+            }
         </div>
     );
 }
 
-function ModalDetails({ subject, grade, showModal, setShowModal }: { subject: any, grade: [], showModal: boolean, setShowModal: Dispatch<SetStateAction<boolean>> }) {
+function ModalDetails({ classCode, subject, showModal, setShowModal }: { classCode: any, subject: any, showModal: boolean, setShowModal: Dispatch<SetStateAction<boolean>> }) {
     const modalRef = useRef(null);
+
+    const { data, isLoading } = useSWR(`${classCode}`, getGrade);
 
     useClickOutside(modalRef, () => { setShowModal(false); });
 
@@ -134,11 +140,20 @@ function ModalDetails({ subject, grade, showModal, setShowModal }: { subject: an
                 visible={showModal}
                 onHide={() => setShowModal(false)}
                 draggable={false}>
-                <DataTable value={grade} size='small'>
-                    <Column field="0" header="Avaliação"></Column>
-                    <Column field="1" header="Data de Lançamento"></Column>
-                    <Column field="2" header="Nota"></Column>
-                </DataTable>
+                {
+                    isLoading ?
+                        <div className='d-flex justify-content-center align-items-center'>
+                            <div className="spinner-border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        :
+                        <DataTable value={data?.data} size='small'>
+                            <Column field="0" header="Avaliação"></Column>
+                            <Column field="1" header="Data de Lançamento"></Column>
+                            <Column field="2" header="Nota"></Column>
+                        </DataTable>
+                }
             </Dialog>
         </div>
     );

@@ -1,6 +1,6 @@
-import { UserData } from "./userData";
+import { ClassModel } from "./userData";
 
 export type UserModel = {
     name: string;
-    userData: UserData[]
+    classes: ClassModel[]
 }
