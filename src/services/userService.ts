@@ -3,11 +3,11 @@ import { ResponseModel } from '@/models/ResponseModel';
 import { UserModel } from '@/models/userModel';
 import { encrypt } from '@/utils/CryptoHelper';
 
-export async function getUserData(user: string, password: string) {
+export async function getUserData(username: string, password: string) {
     let hash = localStorage.getItem('hash');
 
     if (!hash) {
-        hash = encrypt(JSON.stringify({ "user": user, "password": password }));
+        hash = encrypt(JSON.stringify({ "user": username, "password": password }));
     }
 
     const response = await Api.post<ResponseModel<UserModel>>('/userData', { token: hash });
