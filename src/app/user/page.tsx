@@ -7,11 +7,10 @@ import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
 import { ProgressBar } from 'primereact/progressbar';
 import { Skeleton } from 'primereact/skeleton';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import useSWR from 'swr';
 
 import { getGrade, getUserData } from '@/services/userService';
-import { useClickOutside } from 'primereact/hooks';
 
 export default function User() {
     const router = useRouter();
@@ -44,6 +43,7 @@ export default function User() {
                             <i className="pi pi-sign-out text-danger mt-1" title='Sair' onClick={() => exit()} />
                         </div>
                     </div>
+                    {/* <div className='mb-2'>RA: {data && data.data.ra.replace(/\B(?=(\d{3})+(?!\d))/g, ' ')}</div> */}
                     {
                         (!isLoading && isValidating) &&
                         <ProgressBar mode="indeterminate" style={{ height: '3px' }}></ProgressBar>
@@ -127,14 +127,10 @@ function ClassCard({ userData }: { userData: ClassModel }) {
 }
 
 function ModalDetails({ classCode, subject, showModal, setShowModal }: { classCode: any, subject: any, showModal: boolean, setShowModal: Dispatch<SetStateAction<boolean>> }) {
-    const modalRef = useRef(null);
-
     const { data, isLoading } = useSWR(`${classCode}`, getGrade);
 
-    useClickOutside(modalRef, () => { setShowModal(false); });
-
     return (
-        <div ref={modalRef}>
+        <div>
             <Dialog
                 header={subject}
                 visible={showModal}
