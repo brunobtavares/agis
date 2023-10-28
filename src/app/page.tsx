@@ -50,7 +50,7 @@ export default function Login() {
 
   useEffect(() => { checkIfUserIsLogedIn(); }, [data]);
 
-  if (isLoading) {
+  if (isLoading || (data && data.data)) {
     return (
       <div style={{ height: '100vh' }}>
         <div className='d-flex justify-content-center align-items-center h-100'>
