@@ -25,7 +25,7 @@ export default function User() {
     if (!isLoading && (!data || !data.success)) { exit(); }
 
     return (
-        <div className='container mt-2'>
+        <div className='container mt-sm-2 mt-md-5'>
             <div className='d-flex align-items-center'>
                 <i className="pi pi-user mx-1" />
                 <span className='usernameText'>
