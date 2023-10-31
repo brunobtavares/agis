@@ -1,7 +1,8 @@
+import { Button } from "primereact/button";
 import { useEffect, useState } from "react";
 
 export default function AddToHomeScreen() {
-    const [installable, setInstallable] = useState(false);
+    const [installable, setInstallable] = useState(true);
 
     let deferredPrompt: any;
     useEffect(() => {
@@ -17,27 +18,21 @@ export default function AddToHomeScreen() {
     }, []);
 
     async function onInstallApp() {
-        const promptEvent = deferredPrompt;
+        if (!deferredPrompt) return;
 
-        if (!promptEvent) return;
-
-        // Show the install prompt.
-        promptEvent.prompt();
-
-        // Log the result
-        const result = await promptEvent.userChoice;
-
+        deferredPrompt.prompt();
+        const result = await deferredPrompt.userChoice;
         deferredPrompt = null;
-
         setInstallable(false);
     }
 
     if (!installable) return null;
 
-    return (<div>
-        <h1>ADD TO HOME</h1>
-        <button onClick={onInstallApp}>CLICK</button>
-    </div>);
+    return (
+        <div>
+            <Button type='button' label="Instalar App" size="small" icon="pi pi-check" iconPos='right' onClick={onInstallApp} />
+        </div>
+    );
 }
 
 // import React, { useState, useEffect } from 'react';

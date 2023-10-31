@@ -27,7 +27,6 @@ export default function User() {
 
     return (
         <div className='container mt-sm-2 mt-md-5'>
-            {/* <AddToHomeScreen /> */}
             <div className='d-flex align-items-center'>
                 <i className="pi pi-user mx-1" />
                 <span className='usernameText'>
@@ -50,6 +49,7 @@ export default function User() {
                         </div>
                 }
             </div>
+            <AddToHomeScreen />
         </div>
     )
 }
