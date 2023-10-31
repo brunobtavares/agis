@@ -1,4 +1,5 @@
 'use client'
+import AddToHomeScreen from '@/components/AddToHomeScreen';
 import { ClassModel } from '@/models/userData';
 import { getGrade, getUserData } from '@/services/userService';
 import { useRouter } from 'next/navigation';
@@ -26,6 +27,7 @@ export default function User() {
 
     return (
         <div className='container mt-sm-2 mt-md-5'>
+            <AddToHomeScreen />
             <div className='d-flex align-items-center'>
                 <i className="pi pi-user mx-1" />
                 <span className='usernameText'>
