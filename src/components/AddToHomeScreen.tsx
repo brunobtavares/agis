@@ -6,6 +6,14 @@ export default function AddToHomeScreen() {
 
     let deferredPrompt: any;
     useEffect(() => {
+
+        const userAgentString = window.navigator.userAgent;
+        const isIOS = userAgentString.match(/iPhone|iPad|iPod/i);
+        const isAndroid = userAgentString.match(/Android/i);
+        const isMobile = isIOS || isAndroid;
+
+        if (!isMobile) return;
+
         window.addEventListener("beforeinstallprompt", (e) => {
             e.preventDefault();
             deferredPrompt = e;
