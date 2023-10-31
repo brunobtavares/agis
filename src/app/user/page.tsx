@@ -49,7 +49,7 @@ export default function User() {
                         </div>
                 }
             </div>
-            <AddToHomeScreen />
+            {/* <AddToHomeScreen /> */}
         </div>
     )
 }
