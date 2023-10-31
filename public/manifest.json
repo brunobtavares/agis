@@ -1,6 +1,6 @@
 {
-    "name": "GradeApp",
-    "short_name": "GradeApp",
+    "name": "Siga Aluno",
+    "short_name": "Siga Aluno",
     "description": "Uma maneira eficaz de monitorar suas notas, presenças e faltas.",
     "start_url": "/",
     "display": "standalone",
@@ -10,7 +10,8 @@
         {
             "src": "/icon-192x192.png",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "maskable"
         },
         {
             "src": "/icon-256x256.png",
