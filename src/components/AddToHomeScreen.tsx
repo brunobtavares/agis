@@ -2,7 +2,7 @@ import { Button } from "primereact/button";
 import { useEffect, useState } from "react";
 
 export default function AddToHomeScreen() {
-    const [installable, setInstallable] = useState(true);
+    const [installable, setInstallable] = useState(false);
 
     let deferredPrompt: any;
     useEffect(() => {
