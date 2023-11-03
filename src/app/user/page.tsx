@@ -1,6 +1,6 @@
 'use client'
-import AddToHomeScreen from '@/components/AddToHomeScreen';
-import { ClassModel } from '@/models/userData';
+import { GradeModel } from '@/models/gradeModel';
+import { DataItems } from '@/models/userData';
 import { getGrade, getUserData } from '@/services/userService';
 import { useRouter } from 'next/navigation';
 import { Card } from 'primereact/card';
@@ -9,36 +9,38 @@ import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
 import { ProgressBar } from 'primereact/progressbar';
 import { Skeleton } from 'primereact/skeleton';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import useSWR from 'swr';
 
 
 export default function User() {
     const router = useRouter();
 
-    const { data, isLoading, isValidating } = useSWR('/userData', getUserData);
+    const { data: user, isLoading, isValidating } = useSWR('/user', getUserData);
 
     function exit() {
         localStorage.removeItem('hash');
         router.push('/');
     }
 
-    if (!isLoading && (!data || !data.success)) { exit(); }
+    useEffect(() => {
+        if (!isLoading && !user) { exit(); }
+    }, [user]);
 
     return (
         <div className='container mt-sm-2 mt-md-5'>
             <div className='d-flex align-items-center'>
                 <i className="pi pi-user mx-1" />
                 <span className='usernameText'>
-                    {data ? data?.data.name : <Skeleton width='17rem' height="1.3rem"></Skeleton>}
+                    {user ? user.user : <Skeleton width='17rem' height="1.3rem"></Skeleton>}
                 </span>
                 <i className="pi pi-sign-out text-danger ms-2" title='Sair' onClick={() => exit()} />
             </div>
             <div className='mt-1'>
                 {(!isLoading && isValidating) && <ProgressBar mode="indeterminate" style={{ height: '3px' }}></ProgressBar>}
                 {
-                    data ?
-                        data.data.classes.map((data) => { return <ClassCard key={data.code} classData={data} /> })
+                    user ?
+                        user.data.map((data) => { return <ClassCard key={data.classCode} classData={data} /> })
                         :
                         <div className='d-flex flex-column gap-2'>
                             <Skeleton height="11.5rem"></Skeleton>
@@ -54,7 +56,7 @@ export default function User() {
     )
 }
 
-function ClassCard({ classData }: { classData: ClassModel }) {
+function ClassCard({ classData }: { classData: DataItems }) {
     const [showModal, setShowModal] = useState<boolean>(false);
 
     function defineAverageColor(average: any) {
@@ -70,8 +72,8 @@ function ClassCard({ classData }: { classData: ClassModel }) {
             <Card
                 title={
                     <div>
-                        <div>{classData.name}</div>
-                        <div style={{ fontSize: 12, fontWeight: 'lighter' }}>{classData.teacher}</div>
+                        <div>{classData.className}</div>
+                        <div style={{ fontSize: 12, fontWeight: 'lighter' }}>{classData.teacherName}</div>
                     </div>
                 }
                 className='customCardColor'
@@ -95,8 +97,8 @@ function ClassCard({ classData }: { classData: ClassModel }) {
                 showModal
                 &&
                 <ModalDetails
-                    classCode={classData.code}
-                    subject={classData.name}
+                    classCode={classData.classCode}
+                    subject={classData.className}
                     showModal={showModal}
                     setShowModal={setShowModal}
                 />
@@ -107,6 +109,14 @@ function ClassCard({ classData }: { classData: ClassModel }) {
 
 function ModalDetails({ classCode, subject, showModal, setShowModal }: { classCode: any, subject: any, showModal: boolean, setShowModal: Dispatch<SetStateAction<boolean>> }) {
     const { data, isLoading } = useSWR(`${classCode}`, getGrade);
+    const [grade, setGrade] = useState<GradeModel>();
+
+    useEffect(() => {
+        if (data) {
+            const item: GradeModel = data.find(x => x.classCode == classCode)!;
+            setGrade(item);
+        }
+    }, [data]);
 
     return (
         <div>
@@ -123,7 +133,7 @@ function ModalDetails({ classCode, subject, showModal, setShowModal }: { classCo
                             </div>
                         </div>
                         :
-                        <DataTable value={data?.data} size='small'>
+                        <DataTable value={grade?.grade} size='small'>
                             <Column field="0" header="Avaliação"></Column>
                             <Column field="1" header="Data de Lançamento"></Column>
                             <Column field="2" header="Nota"></Column>

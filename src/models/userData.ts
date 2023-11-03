@@ -1,10 +1,13 @@
-export type ClassModel = {
-    code: string;
-    name: string;
-    absence: string;
+import { UserModel } from "./userModel";
+export interface UserDataModel extends UserModel {
+    data: DataItems[]
+}
+
+export interface DataItems {
+    classCode: string;
+    className: string;
     attendance: string;
+    absence: string;
     average: string;
-    teacher: string;
-    duration: string;
-    grade: []
+    teacherName: string;
 }

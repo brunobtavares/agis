@@ -1,7 +1,4 @@
-import { ClassModel } from "./userData";
-
-export type UserModel = {
-    name: string;
+export interface UserModel{
+    user: string;
     ra: string;
-    classes: ClassModel[]
 }

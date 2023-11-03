@@ -1,24 +1,20 @@
 'use client'
-import { ResponseModel } from '@/models/ResponseModel';
-import { UserModel } from '@/models/userModel';
-import { getUserData } from '@/services/userService';
-import { encrypt } from '@/utils/CryptoHelper';
+import { login } from '@/services/userService';
 import { useRouter } from 'next/navigation';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
 import { useEffect, useRef, useState } from 'react';
-import useSWR, { mutate } from 'swr';
 
 export default function Login() {
   const router = useRouter();
   const toast = useRef<Toast>(null);
 
   const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const { data, isLoading } = useSWR('/userData', () => getUserData(username, password));
+  const [redirecting, setRedirecting] = useState(false);
+  const [validating, setValidating] = useState(true);
+  const [username, setUsername] = useState("52729511SP");
+  const [password, setPassword] = useState("bruflale77");
 
   function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -27,30 +23,30 @@ export default function Login() {
 
     setLoading(true);
 
-    var hash = encrypt(JSON.stringify({ "user": username, "password": password }));
-    localStorage.setItem('hash', hash);
-
-    mutate<ResponseModel<UserModel>>('/userData')
+    login(username, password)
       .then((response) => {
-
-        if (!response || !response.success) {
-          setLoading(false);
-          if (toast && toast.current) { toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Usuário ou Senha invalido!' }); }
-          return;
+        if (response.data.success) {
+          setRedirecting(true);
+          router.push('/user');
         }
+        else {
+          if (toast && toast.current) { toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Usuário ou Senha incorreta' }); }
+        }
+
         setLoading(false);
       });
   }
 
-  function checkIfUserIsLogedIn() {
-    if (data && data.success) {
+  useEffect(() => {
+    if (localStorage.getItem('hash')) {
       router.push('/user');
     }
-  }
+    else {
+      setValidating(false);
+    }
+  }, []);
 
-  useEffect(() => { checkIfUserIsLogedIn(); }, [data]);
-
-  if (isLoading || (data && data.data)) {
+  if (validating) {
     return (
       <div style={{ height: '100vh' }}>
         <div className='d-flex justify-content-center align-items-center h-100'>
@@ -95,7 +91,7 @@ export default function Login() {
         </div>
 
         <div className='d-flex justify-content-end w-75'>
-          <Button type='submit' label="Entrar" size="small" icon="pi pi-check" loading={loading} />
+          <Button type='submit' label={redirecting ? "Redirecionando..." : "Entrar"} size="small" icon="pi pi-check" loading={loading} />
         </div>
       </form>
     </div>
