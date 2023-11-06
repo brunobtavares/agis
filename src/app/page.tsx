@@ -13,8 +13,8 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
   const [validating, setValidating] = useState(true);
-  const [username, setUsername] = useState("52729511SP");
-  const [password, setPassword] = useState("bruflale77");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
