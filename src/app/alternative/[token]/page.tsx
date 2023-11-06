@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 
 export default function Alternative({ params }: { params: { token: string } }) {
     const [user, setUser] = useState<UserDataModel>()
+    const [error, setError] = useState(false)
 
     useEffect(() => {
         Api.post<ResponseModel<UserDataModel>>('/alternative', { token: params.token })
@@ -16,8 +17,16 @@ export default function Alternative({ params }: { params: { token: string } }) {
                 if (response.data.success) {
                     setUser(response.data.data);
                 }
+            })
+            .catch((err) => {
+                setError(true);
+                console.log(err);
             });
     }, []);
+
+    if (error) {
+        return (<h1>Erro</h1>);
+    }
 
     return (
         <div className='container mt-sm-2 mt-md-5'>
