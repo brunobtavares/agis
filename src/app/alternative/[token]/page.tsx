@@ -1,7 +1,7 @@
 'use client'
 import { Api } from '@/axios/client';
 import { ResponseModel } from '@/models/ResponseModel';
-import { DataItems, UserDataModel } from '@/models/userData';
+import { DataItem, UserDataModel } from '@/models/userData';
 import { Card } from 'primereact/card';
 import { Skeleton } from 'primereact/skeleton';
 import { exit } from 'process';
@@ -55,7 +55,7 @@ export default function Alternative({ params }: { params: { token: string } }) {
     )
 }
 
-function ClassCard({ classData }: { classData: DataItems }) {
+function ClassCard({ classData }: { classData: DataItem }) {
     const [showModal, setShowModal] = useState<boolean>(false);
 
     function defineAverageColor(average: any) {

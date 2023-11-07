@@ -4,7 +4,6 @@ import { GradeModel } from '@/models/gradeModel';
 import { UserDataModel } from '@/models/userData';
 import { UserModel } from '@/models/userModel';
 import { encrypt } from '@/utils/CryptoHelper';
-import { AxiosResponse } from 'axios';
 
 export async function getUserData() {
     try {

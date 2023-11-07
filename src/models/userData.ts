@@ -1,9 +1,9 @@
 import { UserModel } from "./userModel";
 export interface UserDataModel extends UserModel {
-    data: DataItems[]
+    data: DataItem[]
 }
 
-export interface DataItems {
+export interface DataItem {
     classCode: string;
     className: string;
     attendance: string;

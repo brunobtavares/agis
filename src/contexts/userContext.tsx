@@ -1,5 +1,5 @@
 'use client'
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { UserDataModel } from "@/models/userData";
 import { getUserData, getUserProfile } from "@/services/userService";
 import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from "react";
@@ -15,12 +15,15 @@ type UserContextProps = {
 const UserContext = createContext<UserContextProps>({} as UserContextProps);
 
 const UserProvider: React.FC<UserContextProvider> = ({ children }) => {
+    const pathname = usePathname()
     const router = useRouter();
 
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<UserDataModel | null>(null);
 
     useEffect(() => {
+        if (pathname.includes('/alternative')) return;
+
         getUserProfile()
             .then((response) => {
                 const data = response.data;
