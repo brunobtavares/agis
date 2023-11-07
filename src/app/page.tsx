@@ -1,50 +1,52 @@
 'use client'
+import { useUserContext } from '@/contexts/userContext';
 import { login } from '@/services/userService';
 import { useRouter } from 'next/navigation';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 export default function Login() {
   const router = useRouter();
   const toast = useRef<Toast>(null);
 
-  const [loading, setLoading] = useState(false);
+  const { loading, user, setUser } = useUserContext()
+
+  const [loadingLogin, setLoadingLogin] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
-  const [validating, setValidating] = useState(true);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [validating, setValidating] = useState(false);
+  const [username, setUsername] = useState<string>(process.env.NEXT_PUBLIC_USERNAME ?? '');
+  const [password, setPassword] = useState<string>(process.env.NEXT_PUBLIC_PASSWORD ?? '');
 
   function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (loading) return;
+    if (loadingLogin) return;
 
-    setLoading(true);
+    setLoadingLogin(true);
 
     login(username, password)
       .then((response) => {
         if (response.data.success) {
           setRedirecting(true);
+
+          const { name, ra } = response.data.data;
+          setUser({
+            name,
+            ra,
+            data: []
+          });
+
           router.push('/user');
         }
         else {
           if (toast && toast.current) { toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Usuário ou Senha incorreta' }); }
         }
 
-        setLoading(false);
+        setLoadingLogin(false);
       });
   }
-
-  useEffect(() => {
-    if (localStorage.getItem('hash')) {
-      router.push('/user');
-    }
-    else {
-      setValidating(false);
-    }
-  }, []);
 
   if (validating) {
     return (
@@ -91,7 +93,7 @@ export default function Login() {
         </div>
 
         <div className='d-flex justify-content-end w-75'>
-          <Button type='submit' label={redirecting ? "Redirecionando..." : "Entrar"} size="small" icon="pi pi-check" loading={loading} />
+          <Button type='submit' label={redirecting ? "Redirecionando..." : "Entrar"} size="small" icon="pi pi-check" loading={loadingLogin} />
         </div>
       </form>
     </div>

@@ -33,7 +33,7 @@ export default function Alternative({ params }: { params: { token: string } }) {
             <div className='d-flex align-items-center'>
                 <i className="pi pi-user mx-1" />
                 <span className='usernameText'>
-                    {user ? user.user : <Skeleton width='17rem' height="1.3rem"></Skeleton>}
+                    {user ? user.name : <Skeleton width='17rem' height="1.3rem"></Skeleton>}
                 </span>
                 <i className="pi pi-sign-out text-danger ms-2" title='Sair' onClick={() => exit()} />
             </div>

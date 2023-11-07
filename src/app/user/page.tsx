@@ -1,4 +1,5 @@
 'use client'
+import { useUserContext } from '@/contexts/userContext';
 import { GradeModel } from '@/models/gradeModel';
 import { DataItems } from '@/models/userData';
 import { getGrade, getUserData } from '@/services/userService';
@@ -7,7 +8,6 @@ import { Card } from 'primereact/card';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
-import { ProgressBar } from 'primereact/progressbar';
 import { Skeleton } from 'primereact/skeleton';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import useSWR from 'swr';
@@ -15,33 +15,38 @@ import useSWR from 'swr';
 
 export default function User() {
     const router = useRouter();
+    const { user, setUser } = useUserContext();
+    const [loading, setLoading] = useState(true);
 
-    const { data: user, isLoading, isValidating } = useSWR('/user', getUserData);
+    useEffect(() => {
+        getUserData()
+            .then((response) => {
+                if (response) {
+                    setUser(response);
+                }
+                else { exit(); }
+            })
+            .catch(() => exit())
+            .finally(() => setLoading(false));
+    }, []);
 
     function exit() {
         localStorage.removeItem('hash');
         router.push('/');
     }
 
-    useEffect(() => {
-        if (!isLoading && !user) { exit(); }
-    }, [user]);
-
     return (
         <div className='container mt-sm-2 mt-md-5'>
             <div className='d-flex align-items-center'>
                 <i className="pi pi-user mx-1" />
                 <span className='usernameText'>
-                    {user ? user.user : <Skeleton width='17rem' height="1.3rem"></Skeleton>}
+                    {user ? user.name : <Skeleton width='17rem' height="1.3rem"></Skeleton>}
                 </span>
                 <i className="pi pi-sign-out text-danger ms-2" title='Sair' onClick={() => exit()} />
             </div>
             <div className='mt-1'>
-                {(!isLoading && isValidating) && <ProgressBar mode="indeterminate" style={{ height: '3px' }}></ProgressBar>}
                 {
-                    user ?
-                        user.data.map((data) => { return <ClassCard key={data.classCode} classData={data} /> })
-                        :
+                    loading || !user ?
                         <div className='d-flex flex-column gap-2'>
                             <Skeleton height="11.5rem"></Skeleton>
                             <Skeleton height="11.5rem"></Skeleton>
@@ -49,9 +54,10 @@ export default function User() {
                             <Skeleton height="11.5rem"></Skeleton>
                             <Skeleton height="11.5rem"></Skeleton>
                         </div>
+                        :
+                        user.data.map((data) => { return <ClassCard key={data.classCode} classData={data} /> })
                 }
             </div>
-            {/* <AddToHomeScreen /> */}
         </div>
     )
 }

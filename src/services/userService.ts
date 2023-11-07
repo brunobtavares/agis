@@ -4,11 +4,10 @@ import { GradeModel } from '@/models/gradeModel';
 import { UserDataModel } from '@/models/userData';
 import { UserModel } from '@/models/userModel';
 import { encrypt } from '@/utils/CryptoHelper';
-import { useRouter } from 'next/router';
 
 export async function getUserData() {
     try {
-        const hash = saveLogin();
+        const hash = getHash();
 
         const response = await Api.post<ResponseModel<UserDataModel>>('/user', { token: hash });
 
@@ -26,7 +25,7 @@ export async function getUserData() {
 
 export async function getGrade(classCode: string) {
     try {
-        const hash = saveLogin()
+        const hash = saveHash()
 
         const response = await Api.post<ResponseModel<GradeModel[]>>(`/grade/${classCode}`, { token: hash });
 
@@ -42,12 +41,17 @@ export async function getGrade(classCode: string) {
 }
 
 export function login(username: string, password: string) {
-    const hash = saveLogin(username, password);
+    const hash = saveHash(username, password);
     return Api.post<ResponseModel<UserModel>>(`/login`, { token: hash });
 }
 
-function saveLogin(username: string = '', password: string = '') {
-    let hash = localStorage.getItem('hash');
+export function getUserProfile() {
+    const hash = saveHash();
+    return Api.post<ResponseModel<UserModel>>(`/profile`, { token: hash });
+}
+
+function saveHash(username: string = '', password: string = '') {
+    let hash = getHash();
 
     if (hash) return hash;
 
@@ -56,5 +60,10 @@ function saveLogin(username: string = '', password: string = '') {
         localStorage.setItem('hash', hash);
     }
 
+    return hash;
+}
+
+function getHash() {
+    let hash = localStorage.getItem('hash');
     return hash;
 }
