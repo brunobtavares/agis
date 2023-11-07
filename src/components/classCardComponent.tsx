@@ -32,7 +32,7 @@ export default function ClassCardComponent({ item }: ClassCardComponentProps) {
         const adjustedValue = Math.min(max, Math.max(min, percent));
 
         switch (true) {
-            case adjustedValue === 0:
+            case adjustedValue >= 0 && adjustedValue < 1:
                 return "#008000";
             case adjustedValue >= 1 && adjustedValue <= 5:
                 return "#339933";
