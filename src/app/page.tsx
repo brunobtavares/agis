@@ -11,11 +11,10 @@ export default function Login() {
   const router = useRouter();
   const toast = useRef<Toast>(null);
 
-  const { loading, user, setUser } = useUserContext()
+  const { loading, setUser } = useUserContext()
 
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
-  const [validating, setValidating] = useState(false);
   const [username, setUsername] = useState<string>(process.env.NEXT_PUBLIC_USERNAME ?? '');
   const [password, setPassword] = useState<string>(process.env.NEXT_PUBLIC_PASSWORD ?? '');
 
@@ -48,7 +47,7 @@ export default function Login() {
       });
   }
 
-  if (validating) {
+  if (loading) {
     return (
       <div style={{ height: '100vh' }}>
         <div className='d-flex justify-content-center align-items-center h-100'>

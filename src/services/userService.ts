@@ -4,6 +4,7 @@ import { GradeModel } from '@/models/gradeModel';
 import { UserDataModel } from '@/models/userData';
 import { UserModel } from '@/models/userModel';
 import { encrypt } from '@/utils/CryptoHelper';
+import { AxiosResponse } from 'axios';
 
 export async function getUserData() {
     try {
@@ -25,7 +26,7 @@ export async function getUserData() {
 
 export async function getGrade(classCode: string) {
     try {
-        const hash = saveHash()
+        const hash = getHash()
 
         const response = await Api.post<ResponseModel<GradeModel[]>>(`/grade/${classCode}`, { token: hash });
 
@@ -46,11 +47,14 @@ export function login(username: string, password: string) {
 }
 
 export function getUserProfile() {
-    const hash = saveHash();
+    const hash = getHash();
+
+    if (!hash) return Promise.resolve({ data: null });
+
     return Api.post<ResponseModel<UserModel>>(`/profile`, { token: hash });
 }
 
-function saveHash(username: string = '', password: string = '') {
+function saveHash(username: string, password: string) {
     let hash = getHash();
 
     if (hash) return hash;

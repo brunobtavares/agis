@@ -1,7 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation';
 import { UserDataModel } from "@/models/userData";
-import { getUserData } from "@/services/userService";
+import { getUserData, getUserProfile } from "@/services/userService";
 import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from "react";
 
 type UserContextProvider = { children: ReactNode }
@@ -19,6 +19,27 @@ const UserProvider: React.FC<UserContextProvider> = ({ children }) => {
 
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<UserDataModel | null>(null);
+
+    useEffect(() => {
+        getUserProfile()
+            .then((response) => {
+                const data = response.data;
+                if (data && data.success) {
+                    setUser({
+                        'name': data.data.name,
+                        'ra': data.data.ra,
+                        'data': []
+                    });
+
+                    router.push('/user');
+                }
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    setLoading(false);
+                }, 1000);
+            });
+    }, []);
 
     return (
         <UserContext.Provider value={{ user, setUser, loading }}>
