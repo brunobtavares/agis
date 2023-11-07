@@ -23,6 +23,8 @@ export default function ClassCardComponent({ item }: ClassCardComponentProps) {
         if (isNaN(numericAbsence)) { return ''; }
         if (isNaN(numericTeachingHours)) { return ''; }
 
+        if(numericAbsence == 0) { return "#008000"; }
+
         const max = 25;
         const min = 0;
 
