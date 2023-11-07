@@ -10,4 +10,5 @@ export interface DataItem {
     absence: string;
     average: string;
     teacherName: string;
+    teachingHours: string;
 }

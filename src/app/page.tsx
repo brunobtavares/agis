@@ -21,7 +21,7 @@ export default function Login() {
   function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (loadingLogin) return;
+    if (loadingLogin || (!username || !password)) return;
 
     setLoadingLogin(true);
 
@@ -74,6 +74,9 @@ export default function Login() {
           </span>
           <InputText
             placeholder="Usuário"
+            name='vSIS_USUARIOID'
+            id='vSIS_USUARIOID'
+            autoComplete=''
             onChange={(e) => setUsername(e.target.value.toUpperCase())}
             value={username}
           />
@@ -85,6 +88,8 @@ export default function Login() {
           </span>
           <InputText
             placeholder="Senha"
+            name='vSIS_USUARIOSENHA'
+            id='vSIS_USUARIOSENHA'
             type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}

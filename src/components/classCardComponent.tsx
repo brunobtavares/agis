@@ -16,6 +16,18 @@ export default function ClassCardComponent({ item }: ClassCardComponentProps) {
         return numericAverage >= 6 ? 'text-success' : 'text-danger';
     }
 
+    function defineAbsenceColor(teachingHours: any, absence: any) {
+        const numericAbsence = Number(absence);
+        const numericTeachingHours = Number(teachingHours);
+
+        if (isNaN(numericAbsence)) { return ''; }
+        if (isNaN(numericTeachingHours)) { return ''; }
+
+        const percent = (numericAbsence / numericTeachingHours) * 100;
+
+        return percent == 25 ? 'text-warning' : percent > 25 ? 'text-danger' : '';
+    }
+
     return (
         <div className='mb-2'>
             <Card
@@ -34,7 +46,7 @@ export default function ClassCardComponent({ item }: ClassCardComponentProps) {
                     </div>
                     <div>
                         <h5>Faltas</h5>
-                        <h6>{item.absence}</h6>
+                        <h6 className={defineAbsenceColor(item.teachingHours, item.absence)}>{item.absence}</h6>
                     </div>
                     <div>
                         <h5>Presenças</h5>

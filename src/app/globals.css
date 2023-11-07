@@ -11,13 +11,17 @@ body {
   border-top: none !important;
 } */
 
+.p-button {
+  border-radius: 4px !important;
+}
+
 .usernameText {
   font-size: 20px;
   font-weight: 500;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-} 
+}
 
 /* width */
 ::-webkit-scrollbar {
