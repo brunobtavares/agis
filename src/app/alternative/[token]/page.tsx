@@ -1,8 +1,8 @@
 'use client'
 import { Api } from '@/axios/client';
+import ClassCardComponent from '@/components/classCardComponent';
 import { ResponseModel } from '@/models/ResponseModel';
-import { DataItem, UserDataModel } from '@/models/userData';
-import { Card } from 'primereact/card';
+import { UserDataModel } from '@/models/userData';
 import { Skeleton } from 'primereact/skeleton';
 import { exit } from 'process';
 import { useEffect, useState } from 'react';
@@ -40,7 +40,7 @@ export default function Alternative({ params }: { params: { token: string } }) {
             <div className='mt-1'>
                 {
                     user ?
-                        user.data.map((data) => { return <ClassCard key={data.classCode} classData={data} /> })
+                        user.data.map((item) => { return <ClassCardComponent key={item.classCode} item={item} /> })
                         :
                         <div className='d-flex flex-column gap-2'>
                             <Skeleton height="11.5rem"></Skeleton>
@@ -53,45 +53,4 @@ export default function Alternative({ params }: { params: { token: string } }) {
             </div>
         </div>
     )
-}
-
-function ClassCard({ classData }: { classData: DataItem }) {
-    const [showModal, setShowModal] = useState<boolean>(false);
-
-    function defineAverageColor(average: any) {
-        const numericAverage = Number(average);
-
-        if (isNaN(numericAverage)) { return ''; }
-
-        return numericAverage >= 6 ? 'text-success' : 'text-danger';
-    }
-
-    return (
-        <div className='mb-2'>
-            <Card
-                title={
-                    <div>
-                        <div>{classData.className}</div>
-                        <div style={{ fontSize: 12, fontWeight: 'lighter' }}>{classData.teacherName}</div>
-                    </div>
-                }
-                className='customCardColor'
-                onClick={() => setShowModal(true)}>
-                <div className='d-flex gap-5'>
-                    <div>
-                        <h5>Média</h5>
-                        <h6 className={defineAverageColor(classData.average)}>{classData.average}</h6>
-                    </div>
-                    <div>
-                        <h5>Faltas</h5>
-                        <h6>{classData.absence}</h6>
-                    </div>
-                    <div>
-                        <h5>Presenças</h5>
-                        <h6>{classData.attendance}</h6>
-                    </div>
-                </div>
-            </Card>
-        </div>
-    );
 }
