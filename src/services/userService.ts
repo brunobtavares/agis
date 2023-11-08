@@ -3,7 +3,7 @@ import { ResponseModel } from '@/models/ResponseModel';
 import { GradeModel } from '@/models/gradeModel';
 import { UserDataModel } from '@/models/userData';
 import { UserModel } from '@/models/userModel';
-import { encrypt } from '@/utils/CryptoHelper';
+import { encrypt } from '@/utils/cryptoHelper';
 
 export async function getUserData() {
     try {
@@ -50,7 +50,7 @@ export function getUserProfile() {
 
     if (!hash) return Promise.resolve({ data: null });
 
-    return Api.post<ResponseModel<UserModel>>(`/profile`, { token: hash });
+    return Api.post<ResponseModel<UserModel>>(`/profile`, { token: hash }, { timeout: 20500 });
 }
 
 function saveHash(username: string, password: string) {

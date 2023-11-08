@@ -23,7 +23,7 @@ export default function ClassCardComponent({ item }: ClassCardComponentProps) {
         if (isNaN(numericAbsence)) { return ''; }
         if (isNaN(numericTeachingHours)) { return ''; }
 
-        if(numericAbsence == 0) { return "#008000"; }
+        if (numericAbsence == 0) { return "#198754"; }
 
         const max = 25;
         const min = 0;
@@ -35,7 +35,7 @@ export default function ClassCardComponent({ item }: ClassCardComponentProps) {
 
         switch (true) {
             case adjustedValue >= 0 && adjustedValue < 1:
-                return "#008000";
+                return "#198754";
             case adjustedValue >= 1 && adjustedValue <= 5:
                 return "#339933";
             case adjustedValue >= 6 && adjustedValue <= 10:
@@ -43,7 +43,7 @@ export default function ClassCardComponent({ item }: ClassCardComponentProps) {
             case adjustedValue >= 11 && adjustedValue <= 20:
                 return "#FF6600";
             case adjustedValue >= 21 && adjustedValue <= 25:
-                return "#CC0000";
+                return "#DC3506";
             default:
                 return "rgba(255, 255, 255, 0.87)"
         }

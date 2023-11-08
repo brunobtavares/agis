@@ -1,11 +1,12 @@
 'use client'
 import { useUserContext } from '@/contexts/userContext';
 import { login } from '@/services/userService';
+import { decrypt } from '@/utils/cryptoHelper';
 import { useRouter } from 'next/navigation';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Login() {
   const router = useRouter();
@@ -46,6 +47,19 @@ export default function Login() {
         setLoadingLogin(false);
       });
   }
+
+  useEffect(() => {
+    let hash = localStorage.getItem('hash');
+
+    if (hash) {
+      const userLoginData = decrypt(hash);
+
+      if (userLoginData['user'] && userLoginData['password']) {
+        setUsername(userLoginData['user']);
+        setUsername(userLoginData['password']);
+      }
+    }
+  }, []);
 
   if (loading) {
     return (

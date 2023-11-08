@@ -1,7 +1,7 @@
 'use client'
-import { usePathname, useRouter } from 'next/navigation';
 import { UserDataModel } from "@/models/userData";
-import { getUserData, getUserProfile } from "@/services/userService";
+import { getUserProfile } from "@/services/userService";
+import { usePathname, useRouter } from 'next/navigation';
 import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from "react";
 
 type UserContextProvider = { children: ReactNode }
