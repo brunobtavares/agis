@@ -20,7 +20,6 @@ export async function getUserData() {
     } catch (error) {
         return null;
     }
-
 }
 
 export async function getGrade(classCode: string) {
