@@ -1,6 +1,7 @@
 'use client'
 import ClassCardComponent from '@/components/classCardComponent';
 import ProfileComponent from '@/components/profileComponent';
+import SuggestionComponent from '@/components/suggestionComponent';
 import { useUserContext } from '@/contexts/userContext';
 import { getUserData } from '@/services/userService';
 import { useRouter } from 'next/navigation';
@@ -44,7 +45,12 @@ export default function User() {
                             <Skeleton height="11.5rem"></Skeleton>
                         </div>
                         :
-                        user.data.map((item) => { return <ClassCardComponent key={item.classCode} item={item} /> })
+                        <div>
+                            {
+                                user.data.map((item) => { return <ClassCardComponent key={item.classCode} item={item} /> })
+                            }
+                            <SuggestionComponent />
+                        </div>
                 }
             </div>
         </div>
