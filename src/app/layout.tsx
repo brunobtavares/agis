@@ -9,11 +9,6 @@ import "primereact/resources/primereact.min.css";
 import 'primeicons/primeicons.css';
 import { UserProvider } from '@/contexts/userContext';
 
-export const metadata = {
-  title: 'Grade App',
-  description: 'Faster',
-}
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">

@@ -1,6 +1,6 @@
-# GradeApp
+# Agis
 
-O GradeApp é uma ferramenta desenvolvida para facilitar o acesso e acompanhamento dos dados acadêmicos dos estudantes. O objetivo principal do aplicativo é permitir que os alunos consultem suas notas, faltas e registros de presença de forma rápida, conveniente e em tempo real.
+O Agis é uma ferramenta desenvolvida para facilitar o acesso e acompanhamento dos dados acadêmicos dos estudantes. O objetivo principal do aplicativo é permitir que os alunos consultem suas notas, faltas e registros de presença de forma rápida, conveniente e em tempo real.
 
 ## Funcionalidades
 

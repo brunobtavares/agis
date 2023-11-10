@@ -1,6 +1,6 @@
 {
-    "name": "Siga Aluno",
-    "short_name": "Siga Aluno",
+    "name": "Agis",
+    "short_name": "Agis Aluno",
     "description": "Uma maneira eficaz de monitorar suas notas, presenças e faltas.",
     "start_url": "/",
     "display": "standalone",
