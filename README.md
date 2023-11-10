@@ -18,8 +18,8 @@ O Agis é uma ferramenta desenvolvida para facilitar o acesso e acompanhamento d
 
 ## Instalação
 
-1. Clone este repositório: `git clone https://github.com/brunobtavares/grade-app.git`
-2. Navegue até o diretório do projeto: `cd grade-app`
+1. Clone este repositório: `git clone https://github.com/brunobtavares/agis.git`
+2. Navegue até o diretório do projeto: `cd agis`
 3. Instale as dependências: `npm install`
 4. Execute utilizando `npm run dev`
 
