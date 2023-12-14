@@ -3,6 +3,7 @@ import ClassCardComponent from '@/components/classCardComponent';
 import ProfileComponent from '@/components/profileComponent';
 import SuggestionComponent from '@/components/suggestionComponent';
 import { useUserContext } from '@/contexts/userContext';
+import { DataItem } from '@/models/userData';
 import { getUserData } from '@/services/userService';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from 'primereact/skeleton';
@@ -46,13 +47,17 @@ export default function User() {
                         </div>
                         :
                         <div>
-                            {
-                                user.data.map((item) => { return <ClassCardComponent key={item.classCode} item={item} /> })
-                            }
+                            <RenderClassCard data={user.data} />
                             <SuggestionComponent />
                         </div>
                 }
             </div>
         </div>
     )
+}
+
+function RenderClassCard({ data }: { data: DataItem[] }) {
+    return (<>
+        {data.map((item) => { return <ClassCardComponent key={item.classCode} item={item} /> })}
+    </>);
 }

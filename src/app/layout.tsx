@@ -1,13 +1,13 @@
-import './globals.css'
-import { Inter } from 'next/font/google'
+import { Inter } from 'next/font/google';
+import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
 //theme
-import "primereact/resources/themes/bootstrap4-dark-blue/theme.css";
-import "primereact/resources/primereact.min.css";
-import 'primeicons/primeicons.css';
 import { UserProvider } from '@/contexts/userContext';
+import 'primeicons/primeicons.css';
+import "primereact/resources/primereact.min.css";
+import "primereact/resources/themes/bootstrap4-dark-blue/theme.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

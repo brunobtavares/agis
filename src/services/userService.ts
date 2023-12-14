@@ -53,14 +53,8 @@ export function getUserProfile() {
 }
 
 function saveHash(username: string, password: string) {
-    let hash = getHash();
-
-    if (hash) return hash;
-
-    if (username && password) {
-        hash = encrypt(JSON.stringify({ "user": username, "password": password }));
-        localStorage.setItem('hash', hash);
-    }
+    const hash = encrypt(JSON.stringify({ "user": username, "password": password }));
+    localStorage.setItem('hash', hash);
 
     return hash;
 }
