@@ -1,6 +1,6 @@
 'use client'
 import { useUserContext } from '@/contexts/userContext';
-import { login } from '@/services/userService';
+import { getHash, login } from '@/services/userService';
 import { decrypt } from '@/utils/cryptoHelper';
 import { useRouter } from 'next/navigation';
 import { Button } from 'primereact/button';
@@ -12,7 +12,7 @@ export default function Login() {
   const router = useRouter();
   const toast = useRef<Toast>(null);
 
-  const { loading, setUser } = useUserContext()
+  const { loading, setUser } = useUserContext();
 
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
@@ -49,7 +49,7 @@ export default function Login() {
   }
 
   useEffect(() => {
-    let hash = localStorage.getItem('hash');
+    let hash = getHash();
 
     if (hash) {
       const userLoginData = decrypt(hash);

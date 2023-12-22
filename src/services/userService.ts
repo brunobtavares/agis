@@ -59,7 +59,7 @@ function saveHash(username: string, password: string) {
     return hash;
 }
 
-function getHash() {
+export function getHash() {
     let hash = localStorage.getItem('hash');
     return hash;
 }

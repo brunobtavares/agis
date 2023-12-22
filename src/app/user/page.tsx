@@ -6,26 +6,17 @@ import { useUserContext } from '@/contexts/userContext';
 import { DataItem } from '@/models/userData';
 import { getUserData } from '@/services/userService';
 import { useRouter } from 'next/navigation';
+import { ProgressBar } from 'primereact/progressbar';
 import { Skeleton } from 'primereact/skeleton';
-import { useEffect, useState } from 'react';
-
+import useSWR from 'swr';
 
 export default function User() {
     const router = useRouter();
     const { user, setUser } = useUserContext();
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        getUserData()
-            .then((response) => {
-                if (response) {
-                    setUser(response);
-                }
-                else { exit(); }
-            })
-            .catch(() => exit())
-            .finally(() => setLoading(false));
-    }, []);
+    const { isLoading, isValidating } = useSWR(`/user`, getUserData, {
+        onSuccess: (response) => setUser(response),
+        onError: () => exit()
+    });
 
     function exit() {
         localStorage.removeItem('hash');
@@ -35,9 +26,13 @@ export default function User() {
     return (
         <div className='container mt-sm-2 mt-md-5'>
             <ProfileComponent user={user} onExit={exit} />
+            {isValidating && <ProgressBar
+                mode="indeterminate"
+                color='#20262E'
+                style={{ height: '2px' }}></ProgressBar>}
             <div className='mt-1'>
                 {
-                    loading || !user ?
+                    isLoading || !user ?
                         <div className='d-flex flex-column gap-2'>
                             <Skeleton height="11.5rem"></Skeleton>
                             <Skeleton height="11.5rem"></Skeleton>
