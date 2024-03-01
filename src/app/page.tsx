@@ -56,7 +56,7 @@ export default function Login() {
 
       if (userLoginData['user'] && userLoginData['password']) {
         setUsername(userLoginData['user']);
-        setUsername(userLoginData['password']);
+        setPassword(userLoginData['password']);
       }
     }
   }, []);
