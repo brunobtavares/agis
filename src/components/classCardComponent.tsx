@@ -56,6 +56,7 @@ export default function ClassCardComponent({ item }: ClassCardComponentProps) {
                     <div className=''>
                         <div>{item.className}</div>
                         <div style={{ fontSize: 12, fontWeight: 'lighter' }}>{item.teacherName}</div>
+                        <div style={{ fontSize: 10, fontWeight: 'lighter' }}>{item.schedule}</div>
                     </div>
                 }
                 className='customCardColor'

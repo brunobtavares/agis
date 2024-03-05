@@ -11,4 +11,5 @@ export interface DataItem {
     average: string;
     teacherName: string;
     teachingHours: string;
+    schedule: string;
 }
