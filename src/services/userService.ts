@@ -11,14 +11,19 @@ export async function getUserData() {
 
         const response = await Api.post<ResponseModel<UserDataModel>>('/user', { token: hash });
 
+        console.log(response)
+
         if (!response.data.success) {
             console.error(response.data.message);
             return null;
         };
 
-        return response.data.data;
+        const userData = response.data.data;
+        saveUserData(userData);
+
+        return userData;
     } catch (error) {
-        return null;
+        return getSavedUserData();
     }
 }
 
@@ -57,6 +62,16 @@ function saveHash(username: string, password: string) {
     localStorage.setItem('hash', hash);
 
     return hash;
+}
+
+function saveUserData(data: UserDataModel) {
+    const userData = JSON.stringify(data);
+    localStorage.setItem('userData', userData);
+}
+
+function getSavedUserData() {
+    const userData = localStorage.getItem('userData') || '{"name":"Sair","ra":"Erro","data":[]}';
+    return JSON.parse(userData) as UserDataModel;
 }
 
 export function getHash() {
