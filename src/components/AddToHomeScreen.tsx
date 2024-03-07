@@ -1,46 +1,52 @@
-import { Button } from "primereact/button";
-import { useEffect, useState } from "react";
+import { Button } from 'primereact/button';
+import { useEffect, useState } from 'react';
 
 export default function AddToHomeScreen() {
-    const [installable, setInstallable] = useState(false);
+  const [installable, setInstallable] = useState(false);
 
-    let deferredPrompt: any;
-    useEffect(() => {
+  let deferredPrompt: any;
+  useEffect(() => {
+    const userAgentString = window.navigator.userAgent;
+    const isIOS = userAgentString.match(/iPhone|iPad|iPod/i);
+    const isAndroid = userAgentString.match(/Android/i);
+    const isMobile = isIOS || isAndroid;
 
-        const userAgentString = window.navigator.userAgent;
-        const isIOS = userAgentString.match(/iPhone|iPad|iPod/i);
-        const isAndroid = userAgentString.match(/Android/i);
-        const isMobile = isIOS || isAndroid;
+    if (!isMobile) return;
 
-        if (!isMobile) return;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      setInstallable(true);
+    });
 
-        window.addEventListener("beforeinstallprompt", (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            setInstallable(true);
-        });
+    window.addEventListener('appinstalled', () => {
+      console.log('INSTALL: Success');
+    });
+  }, []);
 
-        window.addEventListener('appinstalled', () => {
-            console.log('INSTALL: Success');
-        });
-    }, []);
+  async function onInstallApp() {
+    if (!deferredPrompt) return;
 
-    async function onInstallApp() {
-        if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const result = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    setInstallable(false);
+  }
 
-        deferredPrompt.prompt();
-        const result = await deferredPrompt.userChoice;
-        deferredPrompt = null;
-        setInstallable(false);
-    }
+  if (!installable) return null;
 
-    if (!installable) return null;
-
-    return (
-        <div>
-            <Button type='button' label="Instalar App" size="small" icon="pi pi-check" iconPos='right' onClick={onInstallApp} />
-        </div>
-    );
+  return (
+    <div>
+      <Button
+        type="button"
+        label="Instalar App"
+        size="small"
+        icon="pi pi-check"
+        iconPos="right"
+        onClick={onInstallApp}
+      />
+    </div>
+  );
 }
 
 // import React, { useState, useEffect } from 'react';
@@ -137,7 +143,6 @@ export default function AddToHomeScreen() {
 //         </>
 //     );
 // }
-
 
 // interface Props {
 //     closePrompt: () => void;

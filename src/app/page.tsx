@@ -1,12 +1,12 @@
-'use client'
-import { useUserContext } from '@/contexts/userContext';
-import { getHash, login } from '@/services/userService';
-import { decrypt } from '@/utils/cryptoHelper';
-import { useRouter } from 'next/navigation';
-import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
-import { Toast } from 'primereact/toast';
-import { useEffect, useRef, useState } from 'react';
+"use client";
+import { useUserContext } from "@/contexts/userContext";
+import { getHash, login } from "@/services/userService";
+import { decrypt } from "@/utils/cryptoHelper";
+import { useRouter } from "next/navigation";
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
+import { Toast } from "primereact/toast";
+import { useEffect, useRef, useState } from "react";
 
 export default function Login() {
   const router = useRouter();
@@ -16,36 +16,44 @@ export default function Login() {
 
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [redirecting, setRedirecting] = useState(false);
-  const [username, setUsername] = useState<string>(process.env.NEXT_PUBLIC_USERNAME ?? '');
-  const [password, setPassword] = useState<string>(process.env.NEXT_PUBLIC_PASSWORD ?? '');
+  const [username, setUsername] = useState<string>(
+    process.env.NEXT_PUBLIC_USERNAME ?? "",
+  );
+  const [password, setPassword] = useState<string>(
+    process.env.NEXT_PUBLIC_PASSWORD ?? "",
+  );
 
   function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (loadingLogin || (!username || !password)) return;
+    if (loadingLogin || !username || !password) return;
 
     setLoadingLogin(true);
 
-    login(username, password)
-      .then((response) => {
-        if (response.data.success) {
-          setRedirecting(true);
+    login(username, password).then((response) => {
+      if (response.data.success) {
+        setRedirecting(true);
 
-          const { name, ra } = response.data.data;
-          setUser({
-            name,
-            ra,
-            data: []
+        const { name, ra } = response.data.data;
+        setUser({
+          name,
+          ra,
+          data: [],
+        });
+
+        router.push("/user");
+      } else {
+        if (toast && toast.current) {
+          toast.current.show({
+            severity: "error",
+            summary: "Erro",
+            detail: "Usuário ou Senha incorreta",
           });
-
-          router.push('/user');
         }
-        else {
-          if (toast && toast.current) { toast.current.show({ severity: 'error', summary: 'Erro', detail: 'Usuário ou Senha incorreta' }); }
-        }
+      }
 
-        setLoadingLogin(false);
-      });
+      setLoadingLogin(false);
+    });
   }
 
   useEffect(() => {
@@ -54,17 +62,17 @@ export default function Login() {
     if (hash) {
       const userLoginData = decrypt(hash);
 
-      if (userLoginData['user'] && userLoginData['password']) {
-        setUsername(userLoginData['user']);
-        setPassword(userLoginData['password']);
+      if (userLoginData["user"] && userLoginData["password"]) {
+        setUsername(userLoginData["user"]);
+        setPassword(userLoginData["password"]);
       }
     }
   }, []);
 
   if (loading) {
     return (
-      <div style={{ height: '100vh' }}>
-        <div className='d-flex justify-content-center align-items-center h-100'>
+      <div style={{ height: "100vh" }}>
+        <div className="d-flex justify-content-center align-items-center h-100">
           <div className="spinner-border" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
@@ -74,13 +82,13 @@ export default function Login() {
   }
 
   return (
-    <div style={{ height: '100vh' }}>
-      <Toast ref={toast} position='top-center' />
+    <div style={{ height: "100vh" }}>
+      <Toast ref={toast} position="top-center" />
       <form
         onSubmit={handleLogin}
-        className='d-flex flex-column justify-content-center align-items-center gap-2 h-100'
+        className="d-flex flex-column justify-content-center align-items-center gap-2 h-100"
       >
-        <h4 className='w-75'>Entre com seu usário siga</h4>
+        <h4 className="w-75">Entre com seu usário siga</h4>
 
         <div className="p-inputgroup w-75">
           <span className="p-inputgroup-addon">
@@ -88,9 +96,9 @@ export default function Login() {
           </span>
           <InputText
             placeholder="Usuário"
-            name='vSIS_USUARIOID'
-            id='vSIS_USUARIOID'
-            autoComplete=''
+            name="vSIS_USUARIOID"
+            id="vSIS_USUARIOID"
+            autoComplete=""
             onChange={(e) => setUsername(e.target.value.toUpperCase())}
             value={username}
           />
@@ -102,18 +110,24 @@ export default function Login() {
           </span>
           <InputText
             placeholder="Senha"
-            name='vSIS_USUARIOSENHA'
-            id='vSIS_USUARIOSENHA'
+            name="vSIS_USUARIOSENHA"
+            id="vSIS_USUARIOSENHA"
             type="password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}
           />
         </div>
 
-        <div className='d-flex justify-content-end w-75'>
-          <Button type='submit' label={redirecting ? "Redirecionando..." : "Entrar"} size="small" icon="pi pi-check" loading={loadingLogin} />
+        <div className="d-flex justify-content-end w-75">
+          <Button
+            type="submit"
+            label={redirecting ? "Redirecionando..." : "Entrar"}
+            size="small"
+            icon="pi pi-check"
+            loading={loadingLogin}
+          />
         </div>
       </form>
     </div>
-  )
+  );
 }
