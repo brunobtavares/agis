@@ -1,16 +1,8 @@
-"use client";
-import { UserDataModel } from "@/models/userData";
-import { getUserProfile } from "@/services/userService";
-import { usePathname, useRouter } from "next/navigation";
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+'use client';
+import { UserDataModel } from '@/models/userData';
+import { getSavedUserData, getUserProfile } from '@/services/userService';
+import { usePathname, useRouter } from 'next/navigation';
+import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useEffect, useState } from 'react';
 
 type UserContextProvider = { children: ReactNode };
 
@@ -30,7 +22,7 @@ const UserProvider: React.FC<UserContextProvider> = ({ children }) => {
   const [user, setUser] = useState<UserDataModel | null>(null);
 
   useEffect(() => {
-    if (pathname.includes("/alternative")) return;
+    if (pathname.includes('/alternative')) return;
 
     getUserProfile()
       .then((response) => {
@@ -42,7 +34,14 @@ const UserProvider: React.FC<UserContextProvider> = ({ children }) => {
             data: [],
           });
 
-          router.push("/user");
+          router.push('/user');
+        }
+      })
+      .catch(() => {
+        const userData = getSavedUserData();
+
+        if (userData.data.length > 0) {
+          router.push('/user');
         }
       })
       .finally(() => {
@@ -52,11 +51,7 @@ const UserProvider: React.FC<UserContextProvider> = ({ children }) => {
       });
   }, []);
 
-  return (
-    <UserContext.Provider value={{ user, setUser, loading }}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={{ user, setUser, loading }}>{children}</UserContext.Provider>;
 };
 
 export { UserContext, UserProvider };
