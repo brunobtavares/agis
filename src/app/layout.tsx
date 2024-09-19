@@ -4,7 +4,6 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 //theme
-import { UserProvider } from '@/contexts/userContext';
 import 'primeicons/primeicons.css';
 import 'primereact/resources/primereact.min.css';
 import 'primereact/resources/themes/bootstrap4-dark-blue/theme.css';
@@ -23,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           crossOrigin="anonymous"></link>
       </head>
       <body className={inter.className}>
-        <UserProvider>{children}</UserProvider>
+        {children}
         <script
           async
           src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"

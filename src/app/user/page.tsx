@@ -2,41 +2,52 @@
 import ClassCardComponent from '@/components/classCardComponent';
 import ProfileComponent from '@/components/profileComponent';
 import SuggestionComponent from '@/components/suggestionComponent';
-import { useUserContext } from '@/contexts/userContext';
 import { DataItem } from '@/models/userData';
-import { getUserData } from '@/services/userService';
+import { StorageService } from '@/services/storageService';
+import { getUserDataAsync } from '@/services/userService';
 import { useRouter } from 'next/navigation';
 import { ProgressBar } from 'primereact/progressbar';
 import { Skeleton } from 'primereact/skeleton';
+import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 
 export default function User() {
   const router = useRouter();
-  const { user, setUser } = useUserContext();
 
-  const { isLoading, isValidating } = useSWR(`/user`, getUserData, {
-    onSuccess: setUser,
-    onError: handleExit,
-  });
+  const [hash, setHash] = useState('');
+
+  const {
+    data: swrResponse,
+    isLoading,
+    isValidating,
+  } = useSWR(hash ? `/api/user` : null, () => getUserDataAsync(hash));
 
   function handleExit() {
-    localStorage.removeItem('hash');
+    StorageService.clear();
     router.push('/');
   }
 
+  useEffect(() => {
+    const localHash = StorageService.getHash();
+    if (!localHash) handleExit();
+    setHash(localHash);
+  }, []);
+
   return (
     <div className="container mt-sm-2 mt-md-5">
-      <ProfileComponent user={user} onExit={handleExit} />
+      <ProfileComponent userName={swrResponse?.data.data.name ?? null} onExit={handleExit} />
 
-      {isValidating && <ProgressBar mode="indeterminate" color="#20262E" style={{ height: '2px' }}></ProgressBar>}
+      {!isLoading && isValidating && (
+        <ProgressBar mode="indeterminate" color="#20262E" style={{ height: '2px' }}></ProgressBar>
+      )}
 
       <div className="mt-1">
-        {isLoading || !user ? (
+        {isLoading || !hash ? (
           <SkeletonLoader />
         ) : (
           <div>
-            <RenderClassCard data={user.data} />
-            <SuggestionComponent />
+            <RenderClassCard data={swrResponse?.data.data.data ?? []} />
+            <SuggestionComponent username={swrResponse?.data.data.name ?? null} />
           </div>
         )}
       </div>

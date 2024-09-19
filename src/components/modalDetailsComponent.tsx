@@ -1,5 +1,6 @@
 import { GradeModel } from '@/models/gradeModel';
-import { getGrade } from '@/services/userService';
+import { StorageService } from '@/services/storageService';
+import { getGradeAsync } from '@/services/userService';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
@@ -14,15 +15,12 @@ interface ModalDetailsProps {
 }
 
 export default function ModalDetailsComponent({ classCode, className, showModal, setShowModal }: ModalDetailsProps) {
-  const { data, isLoading } = useSWR(`${classCode}`, getGrade);
-  const [grade, setGrade] = useState<GradeModel>();
-
-  useEffect(() => {
-    if (data) {
-      const item: GradeModel = data.find((x) => x.classCode == classCode)!;
-      setGrade(item);
-    }
-  }, [data]);
+  const hash = StorageService.getHash();
+  const {
+    data: swrResponse,
+    isLoading,
+    isValidating,
+  } = useSWR(`/api/grade/${classCode}`, () => getGradeAsync(hash, classCode));
 
   return (
     <div>
@@ -34,7 +32,12 @@ export default function ModalDetailsComponent({ classCode, className, showModal,
             </div>
           </div>
         ) : (
-          <DataTable value={grade?.grade} stripedRows size="small">
+          <DataTable
+            value={swrResponse && swrResponse.data.data?.length > 0 ? swrResponse?.data.data[0].grade : []}
+            emptyMessage="Nenhum resultado encontrado."
+            loading={isValidating}
+            stripedRows
+            size="small">
             <Column field="0" header="Avaliação"></Column>
             <Column field="1" header="Data de Lançamento"></Column>
             <Column field="2" header="Nota"></Column>
