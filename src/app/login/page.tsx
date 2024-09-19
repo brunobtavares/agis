@@ -5,15 +5,22 @@ import { useRouter } from 'next/navigation';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
-import { FormEvent, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
+import User from '../user/page';
 
 export default function Login() {
   const router = useRouter();
   const toast = useRef<Toast>(null);
 
   const [loading, setLoading] = useState(false);
+  const [validatingUserLogin, setValidatingUserLogin] = useState(true);
   const [username, setUsername] = useState<string>(process.env.NEXT_PUBLIC_USERNAME ?? '');
   const [password, setPassword] = useState<string>(process.env.NEXT_PUBLIC_PASSWORD ?? '');
+
+  useEffect(() => {
+    if (StorageService.getHash()) router.push('/user');
+    else setValidatingUserLogin(false);
+  });
 
   async function handleUserLogin(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -38,6 +45,8 @@ export default function Login() {
 
     router.push('/user');
   }
+
+  if (validatingUserLogin) return <User />;
 
   return (
     <div style={{ height: '100vh' }}>
