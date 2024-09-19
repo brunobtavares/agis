@@ -31,7 +31,7 @@ export default function User() {
     const localHash = StorageService.getHash();
     if (!localHash) handleExit();
     setHash(localHash);
-  }, []);
+  });
 
   return (
     <div className="container mt-sm-2 mt-md-5">

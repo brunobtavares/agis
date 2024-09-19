@@ -24,7 +24,7 @@ export default function Alternative({ params }: { params: { token: string } }) {
         setError(true);
         console.log(err);
       });
-  }, []);
+  });
 
   if (error) {
     return <h1>Erro</h1>;
