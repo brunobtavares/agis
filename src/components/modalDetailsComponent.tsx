@@ -1,10 +1,10 @@
-import { GradeModel } from "@/models/gradeModel";
-import { getGrade } from "@/services/userService";
-import { Column } from "primereact/column";
-import { DataTable } from "primereact/datatable";
-import { Dialog } from "primereact/dialog";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import useSWR from "swr";
+import { GradeModel } from '@/models/gradeModel';
+import { getGrade } from '@/services/userService';
+import { Column } from 'primereact/column';
+import { DataTable } from 'primereact/datatable';
+import { Dialog } from 'primereact/dialog';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import useSWR from 'swr';
 
 interface ModalDetailsProps {
   classCode: string;
@@ -13,12 +13,7 @@ interface ModalDetailsProps {
   setShowModal: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function ModalDetailsComponent({
-  classCode,
-  className,
-  showModal,
-  setShowModal,
-}: ModalDetailsProps) {
+export default function ModalDetailsComponent({ classCode, className, showModal, setShowModal }: ModalDetailsProps) {
   const { data, isLoading } = useSWR(`${classCode}`, getGrade);
   const [grade, setGrade] = useState<GradeModel>();
 
@@ -31,12 +26,7 @@ export default function ModalDetailsComponent({
 
   return (
     <div>
-      <Dialog
-        header={className}
-        visible={showModal}
-        onHide={() => setShowModal(false)}
-        draggable={false}
-      >
+      <Dialog header={className} visible={showModal} onHide={() => setShowModal(false)} draggable={false}>
         {isLoading ? (
           <div className="d-flex justify-content-center align-items-center">
             <div className="spinner-border" role="status">

@@ -19,6 +19,19 @@ export default function Login() {
   const [username, setUsername] = useState<string>(process.env.NEXT_PUBLIC_USERNAME ?? '');
   const [password, setPassword] = useState<string>(process.env.NEXT_PUBLIC_PASSWORD ?? '');
 
+  useEffect(() => {
+    const hash = getHash();
+
+    if (hash) {
+      const userLoginData = decrypt(hash);
+
+      if (userLoginData['user'] && userLoginData['password']) {
+        setUsername(userLoginData['user']);
+        setPassword(userLoginData['password']);
+      }
+    }
+  }, []);
+
   function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -61,19 +74,6 @@ export default function Login() {
         setLoadingLogin(false);
       });
   }
-
-  useEffect(() => {
-    let hash = getHash();
-
-    if (hash) {
-      const userLoginData = decrypt(hash);
-
-      if (userLoginData['user'] && userLoginData['password']) {
-        setUsername(userLoginData['user']);
-        setPassword(userLoginData['password']);
-      }
-    }
-  }, []);
 
   if (loading) {
     return (

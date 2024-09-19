@@ -1,9 +1,7 @@
-import CryptoJS from "crypto-js";
+import CryptoJS from 'crypto-js';
 
-const key = process.env.NEXT_PUBLIC_ENCRYPT_KEY ?? "";
-const iv = CryptoJS.enc.Utf8.parse(
-  process.env.NEXT_PUBLIC_VT_ENCRYPT_KEY ?? "",
-);
+const key = process.env.NEXT_PUBLIC_ENCRYPT_KEY ?? '';
+const iv = CryptoJS.enc.Utf8.parse(process.env.NEXT_PUBLIC_VT_ENCRYPT_KEY ?? '');
 
 const keyParsed = CryptoJS.enc.Utf8.parse(key);
 

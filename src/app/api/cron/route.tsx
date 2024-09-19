@@ -1,12 +1,12 @@
-import { Api } from "@/axios/client";
+import { Api } from '@/axios/client';
 
 export async function GET() {
-  console.log("Running cron job...");
+  console.log('Running cron job...');
 
-  Api.get("/").then(
-    (response) => console.log("Sucesso"),
-    (err) => console.log("Erro"),
+  Api.get('/').then(
+    (response) => console.log('Sucesso'),
+    (err) => console.log('Erro')
   );
 
-  return new Response("CRON: Check API", { status: 200 });
+  return new Response('CRON: Check API', { status: 200 });
 }

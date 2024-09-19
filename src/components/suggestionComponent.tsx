@@ -1,12 +1,12 @@
-"use client";
-import { Api } from "@/axios/client";
-import { useUserContext } from "@/contexts/userContext";
-import { ResponseModel } from "@/models/ResponseModel";
-import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
-import { InputTextarea } from "primereact/inputtextarea";
-import { Toast } from "primereact/toast";
-import { useRef, useState } from "react";
+'use client';
+import { Api } from '@/axios/client';
+import { useUserContext } from '@/contexts/userContext';
+import { ResponseModel } from '@/models/ResponseModel';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+import { InputTextarea } from 'primereact/inputtextarea';
+import { Toast } from 'primereact/toast';
+import { useRef, useState } from 'react';
 
 export default function SuggestionComponent() {
   const toast = useRef<Toast>(null);
@@ -15,7 +15,7 @@ export default function SuggestionComponent() {
 
   const [showModal, setShowModal] = useState(false);
   const [sending, setSending] = useState(false);
-  const [suggestion, setSuggestion] = useState("");
+  const [suggestion, setSuggestion] = useState('');
 
   function onSendSuggestion(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -24,7 +24,7 @@ export default function SuggestionComponent() {
 
     setSending(true);
 
-    Api.post<ResponseModel<any>>("/suggestion", {
+    Api.post<ResponseModel<any>>('/suggestion', {
       username: user?.name,
       suggestion: suggestion,
     })
@@ -33,9 +33,9 @@ export default function SuggestionComponent() {
         if (data.success) {
           if (toast && toast.current) {
             toast.current.show({
-              severity: "success",
-              summary: "Sucesso",
-              detail: "Sugestão enviada com sucesso!",
+              severity: 'success',
+              summary: 'Sucesso',
+              detail: 'Sugestão enviada com sucesso!',
             });
           }
         }
@@ -43,15 +43,15 @@ export default function SuggestionComponent() {
       .catch(() => {
         if (toast && toast.current) {
           toast.current.show({
-            severity: "error",
-            summary: "Erro",
-            detail: "Falha ao enviar!",
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Falha ao enviar!',
           });
         }
       })
       .finally(() => {
         setShowModal(false);
-        setSuggestion("");
+        setSuggestion('');
         setSending(false);
       });
   }
@@ -62,12 +62,7 @@ export default function SuggestionComponent() {
       <span onClick={() => setShowModal(true)} style={{ fontSize: 12 }}>
         Sugestão?
       </span>
-      <Dialog
-        header="Sugestão de melhoria"
-        visible={showModal}
-        onHide={() => setShowModal(false)}
-        draggable={false}
-      >
+      <Dialog header="Sugestão de melhoria" visible={showModal} onHide={() => setShowModal(false)} draggable={false}>
         <form className="d-flex flex-column" onSubmit={onSendSuggestion}>
           <InputTextarea
             placeholder="Descreva sua sugestão"
