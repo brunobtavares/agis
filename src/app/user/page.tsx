@@ -1,51 +1,53 @@
-"use client";
-import ClassCardComponent from "@/components/classCardComponent";
-import ProfileComponent from "@/components/profileComponent";
-import SuggestionComponent from "@/components/suggestionComponent";
-import { useUserContext } from "@/contexts/userContext";
-import { DataItem } from "@/models/userData";
-import { getUserData } from "@/services/userService";
-import { useRouter } from "next/navigation";
-import { ProgressBar } from "primereact/progressbar";
-import { Skeleton } from "primereact/skeleton";
-import useSWR from "swr";
+'use client';
+import ClassCardComponent from '@/components/classCardComponent';
+import ProfileComponent from '@/components/profileComponent';
+import SuggestionComponent from '@/components/suggestionComponent';
+import { DataItem } from '@/models/userData';
+import { StorageService } from '@/services/storageService';
+import { getUserDataAsync } from '@/services/userService';
+import { useRouter } from 'next/navigation';
+import { ProgressBar } from 'primereact/progressbar';
+import { Skeleton } from 'primereact/skeleton';
+import { useEffect, useState } from 'react';
+import useSWR from 'swr';
 
 export default function User() {
   const router = useRouter();
-  const { user, setUser } = useUserContext();
-  const { isLoading, isValidating } = useSWR(`/user`, getUserData, {
-    onSuccess: (response) => setUser(response),
-    onError: () => exit(),
-  });
 
-  function exit() {
-    localStorage.removeItem("hash");
-    router.push("/");
+  const [hash, setHash] = useState('');
+
+  const {
+    data: swrResponse,
+    isLoading,
+    isValidating,
+  } = useSWR(hash ? `/api/user` : null, () => getUserDataAsync(hash));
+
+  function handleExit() {
+    StorageService.clear();
+    router.push('/');
   }
+
+  useEffect(() => {
+    const localHash = StorageService.getHash();
+    if (!localHash) handleExit();
+    setHash(localHash);
+  });
 
   return (
     <div className="container mt-sm-2 mt-md-5">
-      <ProfileComponent user={user} onExit={exit} />
-      {isValidating && (
-        <ProgressBar
-          mode="indeterminate"
-          color="#20262E"
-          style={{ height: "2px" }}
-        ></ProgressBar>
+      <ProfileComponent userName={swrResponse?.data.data.name ?? null} onExit={handleExit} />
+
+      {!isLoading && isValidating && (
+        <ProgressBar mode="indeterminate" color="#20262E" style={{ height: '2px' }}></ProgressBar>
       )}
+
       <div className="mt-1">
-        {isLoading || !user ? (
-          <div className="d-flex flex-column gap-2">
-            <Skeleton height="11.5rem"></Skeleton>
-            <Skeleton height="11.5rem"></Skeleton>
-            <Skeleton height="11.5rem"></Skeleton>
-            <Skeleton height="11.5rem"></Skeleton>
-            <Skeleton height="11.5rem"></Skeleton>
-          </div>
+        {isLoading || !hash ? (
+          <SkeletonLoader />
         ) : (
           <div>
-            <RenderClassCard data={user.data} />
-            <SuggestionComponent />
+            <RenderClassCard data={swrResponse?.data.data.data ?? []} />
+            <SuggestionComponent username={swrResponse?.data.data.name ?? null} />
           </div>
         )}
       </div>
@@ -60,5 +62,15 @@ function RenderClassCard({ data }: { data: DataItem[] }) {
         return <ClassCardComponent key={item.classCode} item={item} />;
       })}
     </>
+  );
+}
+
+function SkeletonLoader() {
+  return (
+    <div className="d-flex flex-column gap-2">
+      {Array.from({ length: 5 }).map((_, index) => (
+        <Skeleton key={index} height="11.5rem" />
+      ))}
+    </div>
   );
 }
