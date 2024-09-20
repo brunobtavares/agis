@@ -1,5 +1,7 @@
 # Agis
 
+[Acesse aqui](https://agis-fatec.vercel.app/)
+
 O Agis é uma ferramenta desenvolvida para facilitar o acesso e acompanhamento dos dados acadêmicos dos estudantes. O objetivo principal do aplicativo é permitir que os alunos consultem suas notas, faltas e registros de presença de forma rápida, conveniente e em tempo real.
 
 ## Funcionalidades
@@ -11,10 +13,6 @@ O Agis é uma ferramenta desenvolvida para facilitar o acesso e acompanhamento d
 - Suas notas
 - Suas faltas
 - Suas presenças
-
-## Pré-requisitos
-
- - Versão do NodeJS: 18.16.0
 
 ## Instalação
 
