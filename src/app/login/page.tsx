@@ -6,20 +6,19 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { Toast } from 'primereact/toast';
 import { FormEvent, useEffect, useRef, useState } from 'react';
-import User from '../user/page';
 
 export default function Login() {
   const router = useRouter();
   const toast = useRef<Toast>(null);
 
+  const [chekingPersistentSession, setChekingPersistentSession] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [validatingUserLogin, setValidatingUserLogin] = useState(true);
   const [username, setUsername] = useState<string>(process.env.NEXT_PUBLIC_USERNAME ?? '');
   const [password, setPassword] = useState<string>(process.env.NEXT_PUBLIC_PASSWORD ?? '');
 
   useEffect(() => {
     if (StorageService.getHash()) router.push('/user');
-    else setValidatingUserLogin(false);
+    else setChekingPersistentSession(false);
   });
 
   async function handleUserLogin(event: FormEvent<HTMLFormElement>) {
@@ -45,8 +44,6 @@ export default function Login() {
 
     router.push('/user');
   }
-
-  if (validatingUserLogin) return <User />;
 
   return (
     <div style={{ height: '100vh' }}>
@@ -85,7 +82,13 @@ export default function Login() {
         </div>
 
         <div className="d-flex justify-content-end w-75">
-          <Button type="submit" label="Entrar" size="small" icon="pi pi-check" loading={loading} />
+          <Button
+            type="submit"
+            label="Entrar"
+            size="small"
+            icon="pi pi-check"
+            loading={loading || chekingPersistentSession}
+          />
         </div>
       </form>
     </div>

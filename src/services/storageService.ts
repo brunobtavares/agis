@@ -3,8 +3,7 @@ import { UserDataModel } from '@/models/userData';
 import { encrypt } from '@/utils/cryptoHelper';
 
 class StoraService {
-  saveHash(username: string, password: string) {
-    const hash = encrypt(JSON.stringify({ user: username, password: password }));
+  saveHash(hash: string) {
     localStorage.setItem('hash', hash);
     return hash;
   }
@@ -22,6 +21,11 @@ class StoraService {
   getHash() {
     let hash = localStorage.getItem('hash');
     return hash ?? '';
+  }
+
+  createHash(username: string, password: string) {
+    const hash = encrypt(JSON.stringify({ user: username, password: password }));
+    return hash;
   }
 
   clear() {

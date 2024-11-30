@@ -6,8 +6,9 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   const response = await safeExecutionAsync(async () => {
-    const { hash, classCode } = await request.json();
-    const apiResponse = await Api.post<ResponseModel<UserDataModel>>(`/grade/${classCode}`, { token: hash });
+    const hash = request.headers.get('Authorization');
+    const { classCode } = await request.json();
+    const apiResponse = await Api.post<ResponseModel<UserDataModel>>(`/user/grade/${classCode}`, { token: hash });
     return apiResponse.data;
   });
 

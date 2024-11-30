@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   const response = await safeExecutionAsync(async () => {
-    const { hash } = await request.json();
+    const hash = request.headers.get('Authorization');
     const apiResponse = await Api.post<ResponseModel<UserModel>>(`/login`, { token: hash });
     return apiResponse.data;
   });

@@ -31,7 +31,11 @@ export default function User() {
     const localHash = StorageService.getHash();
     if (!localHash) handleExit();
     setHash(localHash);
-  });
+
+    if (swrResponse?.data.success == false) {
+      handleExit();
+    }
+  }, [swrResponse]);
 
   return (
     <div className="container mt-sm-2 mt-md-5">
@@ -47,7 +51,12 @@ export default function User() {
         ) : (
           <div>
             <RenderClassCard data={swrResponse?.data.data.data ?? []} />
-            <SuggestionComponent username={swrResponse?.data.data.name ?? null} />
+            <span style={{ fontSize: 12 }}>
+              código no{' '}
+              <a target="_blank" href="https://github.com/brunobtavares/agis">
+                github
+              </a>
+            </span>
           </div>
         )}
       </div>
