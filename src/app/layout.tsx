@@ -16,6 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="apple-touch-icon" href="/icon-512x512.png"></link>
         <meta name="theme-color" content="#2A323D" />
         <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"></link>
+         <title>AGIS - Fatec</title>
       </head>
       <body className={inter.className}>
         {children}
