@@ -11,5 +11,9 @@ export async function POST(request: Request) {
     return apiResponse.data;
   });
 
+  if (response.message == 'Internal server error' && response.success == false) {
+    return NextResponse.json(null);
+  }
+
   return NextResponse.json(response);
 }

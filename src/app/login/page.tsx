@@ -29,11 +29,24 @@ export default function Login() {
     setLoading(true);
     const response = await loginAsync(username, password);
 
+    if (response.data == null) {
+      if (toast && toast.current) {
+        toast.current.show({
+          severity: 'error',
+          summary: 'Erro Interno',
+          detail: 'O servidor encontra-se indisponível no momento',
+        });
+      }
+
+      setLoading(false);
+      return;
+    }
+
     if (response.data.success == false) {
       if (toast && toast.current) {
         toast.current.show({
           severity: 'error',
-          summary: 'Erro',
+          summary: 'Login',
           detail: 'Usuário ou Senha incorreta',
         });
       }
@@ -51,7 +64,7 @@ export default function Login() {
       <form
         onSubmit={handleUserLogin}
         className="d-flex flex-column justify-content-center align-items-center gap-2 h-100">
-        <h4 className="w-75">Entre com seu usário siga</h4>
+        <h4 className="w-75">Entre com seu usuário siga</h4>
 
         <div className="p-inputgroup w-75">
           <span className="p-inputgroup-addon">

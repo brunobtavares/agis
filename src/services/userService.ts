@@ -14,7 +14,7 @@ export async function loginAsync(username: string, password: string) {
     },
   });
 
-  if (response.data.success) {
+  if (response.data && response.data.success) {
     StorageService.saveHash(hash);
   }
 
