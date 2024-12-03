@@ -5,6 +5,7 @@ import SuggestionComponent from '@/components/suggestionComponent';
 import { DataItem } from '@/models/userData';
 import { StorageService } from '@/services/storageService';
 import { getUserDataAsync } from '@/services/userService';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ProgressBar } from 'primereact/progressbar';
 import { Skeleton } from 'primereact/skeleton';
@@ -30,9 +31,10 @@ export default function User() {
   useEffect(() => {
     const localHash = StorageService.getHash();
     if (!localHash) handleExit();
+
     setHash(localHash);
 
-    if (swrResponse?.data.success == false) {
+    if (swrResponse && swrResponse.data.success == false) {
       handleExit();
     }
   }, [swrResponse]);
@@ -51,12 +53,9 @@ export default function User() {
         ) : (
           <div>
             <RenderClassCard data={swrResponse?.data.data.data ?? []} />
-            <span style={{ fontSize: 12 }}>
-              código no{' '}
-              <a target="_blank" href="https://github.com/brunobtavares/agis">
-                github
-              </a>
-            </span>
+            <a target="_blank" href="https://github.com/brunobtavares/agis">
+              <Image src="/images/gitHub_logo_white.svg" alt="GitHub" width={50} height={21} />
+            </a>
           </div>
         )}
       </div>
